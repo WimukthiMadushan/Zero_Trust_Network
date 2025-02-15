@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button";
+import { dummyData , tableHeaders} from "@/app/Data/LogDetails";
+import RealTimeAccessTable from "./RealTimeAccessTable";
 
 
 export default function Home() {
   return (
-    <>
-      <h1>Hello, Next.js!</h1>
-      <Button>Click me</Button>
-    </>
+    <div className="p-4">
+      <RealTimeAccessTable dummyData={ dummyData} tableHeaders={tableHeaders}/>
+    </div>
   );
 }
