@@ -4,6 +4,7 @@ import { Container, Flex } from '@radix-ui/themes'
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import classNames from "classnames";
+import { ShieldCheck } from 'lucide-react';
 
 const NavBar = () => {
   return (
@@ -11,7 +12,7 @@ const NavBar = () => {
           <Container>
                 <div className='flex items-center gap-5'>
                     <Link href="/">
-                        <CodeIcon className="w-10 h-10" />
+                       <ShieldCheck className="w-10 h-10" color='green'/>
                     </Link>
                     <NavLinks />
                 </div>

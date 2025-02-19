@@ -1,38 +1,64 @@
-"use client"
+"use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
-
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
-} from "@/components/ui/chart"
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { Flex, Box } from "@radix-ui/themes";
+
+const dummyData = [
+  { id: 1, name: "User 1", status: "Healthy" },
+  { id: 2, name: "User 2", status: "Danger" },
+  { id: 3, name: "User 3", status: "Healthy" },
+  { id: 4, name: "User 4", status: "Danger" },
+  { id: 5, name: "User 5", status: "Healthy" },
+  { id: 6, name: "User 6", status: "Danger" },
+  { id: 7, name: "User 7", status: "Healthy" },
+  { id: 8, name: "User 8", status: "Danger" },
+  { id: 9, name: "User 9", status: "Healthy" },
+  { id: 10, name: "User 10", status: "Danger" },
+  { id: 11, name: "User 11", status: "Healthy" },
+  { id: 12, name: "User 12", status: "Danger" },
+  { id: 13, name: "User 13", status: "Healthy" },
+  { id: 14, name: "User 14", status: "Danger" },
+  { id: 15, name: "User 15", status: "Healthy" },
+  { id: 16, name: "User 16", status: "Danger" },
+  { id: 17, name: "User 17", status: "Healthy" },
+  { id: 18, name: "User 18", status: "Danger" },
+  { id: 19, name: "User 19", status: "Healthy" },
+];
+
+const healthyCount = dummyData.filter(user => user.status === "Healthy").length;
+const dangerCount = dummyData.filter(user => user.status === "Danger").length;
 
 const chartData = [
-  { loginType: "Total Healthy Logins", quantity: 45 },
-  { loginType: "Total Unhealthy Logins", quantity: 5 },
+  { status: "Healthy", quantity: healthyCount, fill: "var(--color-healthy)" },
+  { status: "Danger", quantity: dangerCount, fill: "var(--color-danger)" },
 ];
 
 const chartConfig = {
-  devices: {
-    label: "Devices",
-    color: "hsl(var(--chart-3))",
+  healthy: {
+    label: "Healthy",
+    color: "hsl(var(--chart-2))",
   },
-} satisfies ChartConfig
+  danger: {
+    label: "Danger",
+    color: "hsl(var(--chart-1))",
+  },
+} satisfies ChartConfig;
 
-import { TooltipProps } from "recharts";
-import { Flex, Box } from "@radix-ui/themes"
-
-export default function Component({}) {
+export default function Component() {
   return (
-    <Card className="w-[700px] h-[405px]">
+    <Card className="w-full max-w-xl p-4 mx-auto">
       <CardHeader>
         <Flex align="center" justify="between">
           <Box>
@@ -42,27 +68,20 @@ export default function Component({}) {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart data={chartData}>
+          <BarChart height={300} data={chartData}>
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
-            <XAxis dataKey="loginType" tickLine={false} tickMargin={5} axisLine={false} />
+            <XAxis
+              dataKey="status"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+            />
             <YAxis />
-            <ChartTooltip cursor={false} content={<CustomTooltip active={undefined} payload={undefined} />} />
-            <Bar dataKey="quantity" fill="var(--color-desktop)" radius={4} />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+            <Bar dataKey="quantity" strokeWidth={2} radius={8} />
           </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>
-  )
-}
-
-function CustomTooltip({ active, payload }: TooltipProps<any, any>) {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-white shadow-lg rounded-md p-2 text-xs border border-gray-200">
-        <p className="font-semibold text-gray-700">{payload[0].payload.loginType}</p>
-        <p className="text-gray-500">Quantity: <span className="font-medium text-black">{payload[0].value}</span></p>
-      </div>
-    );
-  }
-  return null;
+  );
 }
