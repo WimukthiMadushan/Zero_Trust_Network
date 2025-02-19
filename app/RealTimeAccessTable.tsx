@@ -1,51 +1,61 @@
 'use client';
 
-import { DatePickerDemo } from "@/components/DatePicker";
+import StatusSelector from "@/components/StatusSelector";
 import Table from "@/components/Table";
-import { Flex, Container } from "@radix-ui/themes";
+import { Flex } from "@radix-ui/themes";
 import { useState } from "react";
 
-interface DummyData {
+interface userLoginData {
   id: number;
   name: string;
-  accessTime: string;
   status: string;
-  removalTime: string;
-  date: string;
 }
 
 interface TableHeader {
-    label: string;
-    key: string;
-} 
-   
-const RealTimeAccessTable = ({ dummyData, tableHeaders }: { dummyData: DummyData[] , tableHeaders: TableHeader[] }) => {
+  label: string;
+  key: string;
+}
+
+const RealTimeAccessTable = ({ userLoginData, tableHeaders }: { userLoginData: userLoginData[] , tableHeaders: TableHeader[] }) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [statusFilter, setStatusFilter] = useState<string>('All');
 
   const pageSize = 6;
-  const itemCount = dummyData.length;
+
+  const filteredData = statusFilter === 'All' ? userLoginData : userLoginData.filter((data) => data.status === statusFilter)
+    
   const onPageChange = (page: number) => {
     setCurrentPage(page);
   };
+
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const currentData = dummyData.slice(startIndex, endIndex);
-  
+  const currentData = filteredData.slice(startIndex, endIndex);
+
   return (
-    <Container mb="16" width="60%">
-      <Flex align="center" justify="between" className="mb-4">
-        <p className="text-2xl font-bold">Real Time Access Table</p>
-        <DatePickerDemo />
+    <div className="mb-5 w-[55%] border border-gray-300 shadow-lg rounded-xl p-5 bg-white">
+      <Flex align="center" justify="between" className="mb-5">
+        <p className="text-2xl font-bold">Peak Time Analysis Table</p>
+        <StatusSelector 
+          placeholder="Filter By Status.."  
+          label="Status" 
+          items={[
+            { value: 'All', name: 'All' },
+            { value: 'Healthy', name: 'Healthy' },
+            { value: 'Danger', name: 'Danger' }
+          ]}
+          onChange={setStatusFilter} 
+        />
       </Flex>
       <Table 
-        dummyData={currentData} 
+        userLoginData={currentData} 
         tableHeaders={tableHeaders} 
         pageSize={pageSize} 
         currentPage={currentPage} 
-        itemCount={itemCount} 
+        itemCount={filteredData.length}
         onPageChange={onPageChange} 
       />
-    </Container>
+    </div>
   );
 };
 

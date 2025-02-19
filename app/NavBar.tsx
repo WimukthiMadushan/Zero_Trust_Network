@@ -24,7 +24,10 @@ const NavLinks = () => {
   const currentPath = usePathname();
 
   const links = [
-    { href: "/", label: "Historical Data" },
+    { href: "/", label: "Peak Time Analysis" },
+    { href: "/BehaviouralAnalysis", label:"Behavioural Analysis" },
+    { href: "/DeviceMonitoring", label: 'Device Monitoring'},
+    { href: "/RiskAssesment", label: "Risk Assesment" }
   ];
 
   return (
