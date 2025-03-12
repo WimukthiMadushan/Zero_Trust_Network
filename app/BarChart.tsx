@@ -37,13 +37,6 @@ const dummyData = [
   { id: 19, name: "User 19", status: "Healthy" },
 ];
 
-const healthyCount = dummyData.filter(user => user.status === "Healthy").length;
-const dangerCount = dummyData.filter(user => user.status === "Danger").length;
-
-const chartData = [
-  { status: "Healthy", quantity: healthyCount, fill: "var(--color-healthy)" },
-  { status: "Danger", quantity: dangerCount, fill: "var(--color-danger)" },
-];
 
 const chartConfig = {
   healthy: {
@@ -56,7 +49,20 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export default function Component() {
+interface userDataProps {
+  name: string;
+  status: boolean;
+}
+
+export default function Component({ userData }: { userData: userDataProps[] }) {
+  const healthyCount = userData.filter(user => user.status === true).length;
+  const dangerCount = userData.filter(user => user.status === false).length;
+
+  const chartData = [
+  { status: "Healthy", quantity: healthyCount, fill: "var(--color-healthy)" },
+  { status: "Danger", quantity: dangerCount, fill: "var(--color-danger)" },
+  ];
+
   return (
     <Card className="w-full max-w-xl p-4 mx-auto">
       <CardHeader>
