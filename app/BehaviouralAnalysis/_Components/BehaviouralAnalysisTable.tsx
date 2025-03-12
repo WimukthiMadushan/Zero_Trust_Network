@@ -13,42 +13,22 @@ import React, { useState } from 'react';
 import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
 
 const tableHeaders = [
-    { label: "User ID", key: "id" },
     { label: "User Name", key: "name" },
     { label: "IP status", key: "ip" },
     { label: "Location status", key: "location" },
     { label: "Request Amount", key: "request" },
 ];
 
-const tableData = [
-    { id: 1, name: "John Doe", ip: "Healthy", location: "Healthy", request: "Healthy" },
-    { id: 2, name: "Jane Doe", ip: "Healthy", location: "Danger", request: "Healthy" },
-    { id: 3, name: "John Doe", ip: "Danger", location: "Healthy", request: "Danger" },
-    { id: 4, name: "Jane Doe", ip: "Healthy", location: "Danger", request: "Healthy" },
-    { id: 5, name: "John Doe", ip: "Danger", location: "Healthy", request: "Healthy" },
-    { id: 6, name: "Jane Doe", ip: "Healthy", location: "Healthy", request: "Danger" },
-    { id: 7, name: "Mark Smith", ip: "Healthy", location: "Healthy", request: "Healthy" },
-    { id: 8, name: "Alice Brown", ip: "Danger", location: "Healthy", request: "Healthy" },
-    { id: 9, name: "Bob Johnson", ip: "Healthy", location: "Danger", request: "Healthy" },
-    { id: 10, name: "Charlie White", ip: "Healthy", location: "Healthy", request: "Danger" },
-    { id: 11, name: "Eve Davis", ip: "Danger", location: "Healthy", request: "Healthy" },
-    { id: 12, name: "Frank Moore", ip: "Healthy", location: "Danger", request: "Healthy" },
-    { id: 13, name: "Grace Wilson", ip: "Healthy", location: "Healthy", request: "Healthy" },
-    { id: 14, name: "Hank Lee", ip: "Danger", location: "Healthy", request: "Danger" },
-    { id: 15, name: "Isla Scott", ip: "Healthy", location: "Healthy", request: "Danger" },
-    { id: 16, name: "Jake Harris", ip: "Healthy", location: "Danger", request: "Healthy" },
-    { id: 17, name: "Lily Clark", ip: "Danger", location: "Healthy", request: "Healthy" },
-    { id: 18, name: "Mia Walker", ip: "Healthy", location: "Healthy", request: "Healthy" },
-    { id: 19, name: "Nathan Lewis", ip: "Healthy", location: "Danger", request: "Danger" },
-    { id: 20, name: "Olivia Young", ip: "Danger", location: "Healthy", request: "Healthy" },
-];
-
-const StatusDetails: Record<any, { label: string; color: "red" | "green" }> = {
+const StatusDetails: Record<string, { label: string; color: "red" | "green" }> = {
     Healthy: { label: "Healthy", color: "green" },
     Danger: { label: "Danger", color: "red" },
 };
 
-const BehaviouralAnalysisTable = () => {
+type DataProps = {
+    data: { name: string; ip_address: boolean; location: boolean; request: boolean }[];
+};
+
+const BehaviouralAnalysisTable: React.FC<DataProps> = ({ data }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [statusFilter, setStatusFilter] = useState({
         ip: 'All',
@@ -58,15 +38,20 @@ const BehaviouralAnalysisTable = () => {
 
     const pageSize = 6;
 
-    const onPageChange = (page: number) => {
-        setCurrentPage(page);
-    };
-    
-    const filteredData = tableData.filter((data) => {
+    // Convert boolean values to "Healthy" or "Danger"
+    const transformedData = data.map(user => ({
+        name: user.name,
+        ip: user.ip_address ? "Healthy" : "Danger",
+        location: user.location ? "Healthy" : "Danger",
+        request: user.request ? "Healthy" : "Danger",
+    }));
+
+    // Filtering logic
+    const filteredData = transformedData.filter(user => {
         return (
-            (statusFilter.ip === 'All' || data.ip === statusFilter.ip) &&
-            (statusFilter.location === 'All' || data.location === statusFilter.location) &&
-            (statusFilter.request === 'All' || data.request === statusFilter.request)
+            (statusFilter.ip === 'All' || user.ip === statusFilter.ip) &&
+            (statusFilter.location === 'All' || user.location === statusFilter.location) &&
+            (statusFilter.request === 'All' || user.request === statusFilter.request)
         );
     });
 
@@ -78,14 +63,11 @@ const BehaviouralAnalysisTable = () => {
     const totalPages = Math.ceil(itemCount / pageSize);
 
     const handlePrevPage = () => {
-        if (currentPage > 1) {
-            onPageChange(currentPage - 1);
-        }
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
     };
+
     const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            onPageChange(currentPage + 1);
-        }
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
     };
 
     return (
@@ -101,7 +83,7 @@ const BehaviouralAnalysisTable = () => {
                             { value: 'Healthy', name: 'Healthy' },
                             { value: 'Danger', name: 'Danger' },
                         ]}
-                        onChange={(value) => setStatusFilter((prev) => ({ ...prev, ip: value }))}
+                        onChange={(value) => setStatusFilter(prev => ({ ...prev, ip: value }))}
                     />
                     <StatusSelector
                         placeholder="Filter By Location Status.."
@@ -111,7 +93,7 @@ const BehaviouralAnalysisTable = () => {
                             { value: 'Healthy', name: 'Healthy' },
                             { value: 'Danger', name: 'Danger' },
                         ]}
-                        onChange={(value) => setStatusFilter((prev) => ({ ...prev, location: value }))}
+                        onChange={(value) => setStatusFilter(prev => ({ ...prev, location: value }))}
                     />
                     <StatusSelector
                         placeholder="Filter By Request Amount.."
@@ -121,7 +103,7 @@ const BehaviouralAnalysisTable = () => {
                             { value: 'Healthy', name: 'Healthy' },
                             { value: 'Danger', name: 'Danger' },
                         ]}
-                        onChange={(value) => setStatusFilter((prev) => ({ ...prev, request: value }))}
+                        onChange={(value) => setStatusFilter(prev => ({ ...prev, request: value }))}
                     />
                 </div>
             </Flex>
@@ -135,23 +117,22 @@ const BehaviouralAnalysisTable = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {currentData.map((data: any) => (
-                            <TableRow key={data.id} className="even:bg-gray-50">
-                                <TableCell className="py-2 px-4 border-t border-gray-200">{data.id}</TableCell>
-                                <TableCell className="py-2 px-4 border-t border-gray-200">{data.name}</TableCell>
+                        {currentData.map((user, index) => (
+                            <TableRow key={index} className="even:bg-gray-50">
+                                <TableCell className="py-2 px-4 border-t border-gray-200">{user.name}</TableCell>
                                 <TableCell className="py-2 px-4 border-t border-gray-200">
-                                    <Badge color={StatusDetails[data.ip].color}>
-                                        {data.ip}
+                                    <Badge color={StatusDetails[user.ip].color}>
+                                        {user.ip}
                                     </Badge>
                                 </TableCell>
                                 <TableCell className="py-2 px-4 border-t border-gray-200">
-                                    <Badge color={StatusDetails[data.location].color}>
-                                        {data.location}
+                                    <Badge color={StatusDetails[user.location].color}>
+                                        {user.location}
                                     </Badge>
                                 </TableCell>
                                 <TableCell className="py-2 px-4 border-t border-gray-200">
-                                    <Badge color={StatusDetails[data.request].color}>
-                                        {data.request}
+                                    <Badge color={StatusDetails[user.request].color}>
+                                        {user.request}
                                     </Badge>
                                 </TableCell>
                             </TableRow>
@@ -160,6 +141,7 @@ const BehaviouralAnalysisTable = () => {
                 </Table>
             </Box>
             {/* Pagination Controls */}
+            {totalPages > 1 && (
             <div className="mt-5 flex items-center justify-center space-x-4">
                 <button
                     onClick={handlePrevPage}
@@ -176,7 +158,8 @@ const BehaviouralAnalysisTable = () => {
                 >
                     <DoubleArrowRightIcon />
                 </button>
-            </div>
+            </div>)}
+            
         </Box>
     );
 };
