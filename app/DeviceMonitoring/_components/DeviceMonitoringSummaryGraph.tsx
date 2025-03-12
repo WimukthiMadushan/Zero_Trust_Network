@@ -15,37 +15,6 @@ import {
 } from "@/components/ui/chart";
 import { Flex, Box } from "@radix-ui/themes";
 
-const dummyData = [
-    { id: "001", status: "Healthy" },
-    { id: "002", status: "Danger" },
-    { id: "003", status: "Healthy" },
-    { id: "004", status: "Danger" },
-    { id: "005", status: "Healthy" },
-    { id: "006", status: "Danger" },
-    { id: "007", status: "Healthy" },
-    { id: "008", status: "Danger" },
-    { id: "009", status: "Healthy" },
-    { id: "010", status: "Danger" },
-    { id: "011", status: "Healthy" },
-    { id: "012", status: "Danger" },
-    { id: "013", status: "Healthy" },
-    { id: "014", status: "Danger" },
-    { id: "015", status: "Healthy" },
-    { id: "016", status: "Danger" },
-    { id: "017", status: "Healthy" },
-    { id: "018", status: "Danger" },
-    { id: "019", status: "Healthy" },
-    { id: "020", status: "Danger" },
-];
-
-const healthyCount = dummyData.filter(user => user.status === "Healthy").length;
-const dangerCount = dummyData.filter(user => user.status === "Danger").length;
-
-const chartData = [
-  { status: "Healthy", quantity: healthyCount, fill: "var(--color-healthy)"},
-  { status: "Danger", quantity: dangerCount,fill: "var(--color-danger)" },
-];
-
 const chartConfig = {
     healthy: {
       label: "Healthy",
@@ -58,7 +27,15 @@ const chartConfig = {
   } satisfies ChartConfig;
   
 
-const DeviceMonitoringSummaryGraph = () => {
+const DeviceMonitoringSummaryGraph = ({ packetAnalysisData = [] }: any) => {
+  console.log("Packet Analysis Data:", packetAnalysisData);
+  const healthyCount = packetAnalysisData.filter((user: { status: boolean; }) => user.status === true).length;
+  const dangerCount = packetAnalysisData.filter((user: { status: boolean; }) => user.status === false).length;
+
+  const chartData = [
+  { status: "Healthy", quantity: healthyCount, fill: "var(--color-healthy)"},
+  { status: "Danger", quantity: dangerCount,fill: "var(--color-danger)" },
+];
     return (
         <Card className="w-[700px] h-[405px]">
           <CardHeader>

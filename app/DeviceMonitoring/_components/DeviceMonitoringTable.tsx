@@ -1,6 +1,6 @@
 'use client';
 import StatusSelector from '@/components/StatusSelector';
-import { Badge, Box, Flex } from '@radix-ui/themes';
+import { Badge, Box, Callout, Flex } from '@radix-ui/themes';
 import {
     Table,
     TableBody,
@@ -8,45 +8,22 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-
 import React, { useState } from 'react'
 import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
+import { ShieldCheck, Skull } from 'lucide-react';
 
 const tableHeaders = [
-    { label: "Packet ID", key: "id" },
+    { label: "Packet", key: "packet" },
     { label: "Status", key: "status" },
 ];
 
-const tableData = [
-        { id: "001", status: "Healthy" },
-        { id: "002", status: "Danger" },
-        { id: "003", status: "Healthy" },
-        { id: "004", status: "Danger" },
-        { id: "005", status: "Healthy" },
-        { id: "006", status: "Danger" },
-        { id: "007", status: "Healthy" },
-        { id: "008", status: "Danger" },
-        { id: "009", status: "Healthy" },
-        { id: "010", status: "Danger" },
-        { id: "011", status: "Healthy" },
-        { id: "012", status: "Danger" },
-        { id: "013", status: "Healthy" },
-        { id: "014", status: "Danger" },
-        { id: "015", status: "Healthy" },
-        { id: "016", status: "Danger" },
-        { id: "017", status: "Healthy" },
-        { id: "018", status: "Danger" },
-        { id: "019", status: "Healthy" },
-        { id: "020", status: "Danger" },
-    
-];
-
-const StatusDetails: Record<any, { label: string; color: "red" | "green" }> = {
-    Healthy: { label: "Healthy", color: "green" },
-    Danger: { label: "Danger", color: "red" },
+const StatusDetails: Record<string, { label: string; color: "red" | "green" }> = {
+    true: { label: "Healthy", color: "green" },
+    false: { label: "Danger", color: "red" },
 };
 
-const DeviceMonitoringTable = () => {
+const DeviceMonitoringTable = ({ packetAnalysisData = [], currentStatus }: any) => {
+    //console.log("Packet Analysis Data:", packetAnalysisData);
     const [currentPage, setCurrentPage] = useState(1);
     const [statusFilter, setStatusFilter] = useState('All');
 
@@ -55,10 +32,21 @@ const DeviceMonitoringTable = () => {
     const onPageChange = (page: number) => {
         setCurrentPage(page);
     };
+    const formattedData = packetAnalysisData.map((data: any) => ({
+        packet: data.packet,
+        status: data.status ? "Healthy" : "Danger",
+    }));
 
-    const filteredData = statusFilter === 'All' ? tableData : tableData.filter((data) => data.status === statusFilter);
+    const sortedData = formattedData.sort((a: { packet: number; }, b: { packet: number; }) => {
+        return b.packet - a.packet;
+    });
 
-    const itemCount = filteredData.length; 
+    const filteredData =
+        statusFilter === 'All'
+            ? sortedData
+            : sortedData.filter((data: any) => data.status === statusFilter);
+
+    const itemCount = filteredData.length;
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     const currentData = filteredData.slice(startIndex, endIndex);
@@ -70,7 +58,6 @@ const DeviceMonitoringTable = () => {
             onPageChange(currentPage - 1);
         }
     };
-
     const handleNextPage = () => {
         if (currentPage < totalPages) {
             onPageChange(currentPage + 1);
@@ -81,60 +68,80 @@ const DeviceMonitoringTable = () => {
         <div className="mb-5 w-[55%] border border-gray-300 shadow-lg rounded-xl p-5 bg-white">
             <Flex align="center" justify="between" className="mb-5">
                 <p className="text-2xl font-bold">Network Packets Analysis Table</p>
-                <StatusSelector 
-                    placeholder="Filter By Status.."  
-                    label="Status" 
+                <StatusSelector
+                    placeholder="Filter By Status.."
+                    label="Status"
                     items={[
                         { value: 'All', name: 'All' },
                         { value: 'Healthy', name: 'Healthy' },
                         { value: 'Danger', name: 'Danger' }
                     ]}
-                    onChange={setStatusFilter} 
+                    onChange={setStatusFilter}
                 />
             </Flex>
 
-            <Box>
+            {/* Risk Assessment Callout */}
+            <Callout.Root color={currentStatus ? "green" : "red"} className="mb-5">
+                <Callout.Icon>
+                    {currentStatus ? <ShieldCheck color="green" /> : <Skull color="red" />}
+                </Callout.Icon>
+                <Callout.Text>
+                    Current Packet is <strong>{currentStatus ? "Healthy" : "Danger"}</strong>
+                </Callout.Text>
+            </Callout.Root>
+
                 <Table className="w-full border-separate border-spacing-0 shadow-md rounded-lg overflow-hidden">
                     <TableHeader className="bg-gray-100 border-b-2 border-gray-300">
                         <TableRow>
                             {tableHeaders.map((header) => (
-                                <TableCell key={header.key} className="py-2 px-4 text-left font-medium">{header.label}</TableCell>
+                                <TableCell key={header.key} className="py-2 px-4 text-left font-medium">
+                                    {header.label}
+                                </TableCell>
                             ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {currentData.map((data: any) => (
-                            <TableRow key={data.id} className="even:bg-gray-50">
-                                <TableCell className="py-2 px-4 border-t border-gray-200">{data.id}</TableCell>
-                                <TableCell className="py-2 px-4 border-t border-gray-200">
-                                    <Badge color={StatusDetails[data.status].color}>
-                                        {data.status}
-                                    </Badge>
+                        {currentData.length > 0 ? (
+                            currentData.map((data: any) => (
+                                <TableRow key={data.packet} className="even:bg-gray-50">
+                                    <TableCell className="py-2 px-4 border-t border-gray-200">{data.packet}</TableCell>
+                                    <TableCell className="py-2 px-4 border-t border-gray-200">
+                                        <Badge color={StatusDetails[String(data.status === "Healthy")].color}>
+                                            {data.status}
+                                        </Badge>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={2} className="py-2 px-4 text-center text-gray-500">
+                                    No data available
                                 </TableCell>
                             </TableRow>
-                        ))}
+                        )}
                     </TableBody>
                 </Table>
-            </Box>
 
             {/* Pagination Controls */}
-            <div className="mt-5 flex items-center justify-center space-x-4">
-                <button 
-                    onClick={handlePrevPage} 
-                    disabled={currentPage === 1} 
+            {totalPages > 1 && (
+                <div className="mt-5 flex items-center justify-center space-x-4">
+                <button
+                    onClick={handlePrevPage}
+                    disabled={currentPage === 1}
                     className="px-4 py-2 bg-black text-white rounded disabled:bg-gray-300">
-                    <DoubleArrowLeftIcon/>
+                    <DoubleArrowLeftIcon />
                 </button>
                 <span> Page {currentPage} of {totalPages} </span>
-                <button 
-                    onClick={handleNextPage} 
-                    disabled={currentPage === totalPages} 
+                <button
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
                     className="px-4 py-2 bg-black text-white rounded disabled:bg-gray-300">
-                    <DoubleArrowRightIcon/>
+                    <DoubleArrowRightIcon />
                 </button>
             </div>
+            )}  
         </div>
     );
-}
+};
 
 export default DeviceMonitoringTable;
