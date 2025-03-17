@@ -1,19 +1,16 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
-import { Flex, Box } from "@radix-ui/themes";
+
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { Box, Flex } from "@radix-ui/themes";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 const chartConfig = {
     healthy: {
@@ -25,23 +22,27 @@ const chartConfig = {
       color: "hsl(var(--chart-1))", 
     },
   } satisfies ChartConfig;
-  
 
-const DeviceMonitoringSummaryGraph = ({ packetAnalysisData = [] }: any) => {
-  console.log("Packet Analysis Data:", packetAnalysisData);
-  const healthyCount = packetAnalysisData.filter((user: { status: boolean; }) => user.status === true).length;
-  const dangerCount = packetAnalysisData.filter((user: { status: boolean; }) => user.status === false).length;
 
-  const chartData = [
-  { status: "Healthy", quantity: healthyCount, fill: "var(--color-healthy)"},
-  { status: "Danger", quantity: dangerCount,fill: "var(--color-danger)" },
-];
+const PatientHealthAnalysisGraph = ({ deviceData = [] }: any) => {
+    console.log("Patient Health Data:", deviceData);
+
+    const healthyCount = deviceData.filter((device: { health: boolean; }) => device.health === true).length;
+    const dangerCount = deviceData.filter((device: { health: boolean; }) => device.health === false).length;
+    console.log(healthyCount, dangerCount);
+
+    const chartData = [
+        { status: "Healthy", quantity: healthyCount, fill: "var(--color-healthy)"},
+        { status: "Danger", quantity: dangerCount,fill: "var(--color-danger)" },
+    ];
+
+
     return (
-        <Card className="w-[700px] h-[405px]">
+      <Card className="w-full max-w-xl p-4 mx-auto">
           <CardHeader>
             <Flex align="center" justify="between">
               <Box>
-                <CardTitle>Summary Of the Network Packet Status</CardTitle>
+                <CardTitle>Summary Of the Patient Health Status</CardTitle>
               </Box>
             </Flex>
           </CardHeader>
@@ -53,8 +54,7 @@ const DeviceMonitoringSummaryGraph = ({ packetAnalysisData = [] }: any) => {
                   dataKey="status"
                   tickLine={false}
                   tickMargin={10}
-                  axisLine={false}
-                  
+                  axisLine={false} 
                 />
                 <YAxis />
                 <ChartTooltip
@@ -73,4 +73,4 @@ const DeviceMonitoringSummaryGraph = ({ packetAnalysisData = [] }: any) => {
       );
 }
 
-export default DeviceMonitoringSummaryGraph
+export default PatientHealthAnalysisGraph

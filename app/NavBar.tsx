@@ -1,33 +1,38 @@
 'use client';
 import { CodeIcon } from '@radix-ui/react-icons';
-import { Container, Flex } from '@radix-ui/themes'
+import { Button, Container, Flex } from '@radix-ui/themes'
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import classNames from "classnames";
 import { ShieldCheck } from 'lucide-react';
+import Auth from '@/components/Auth';
 
 const NavBar = () => {
   return (
     <nav className="border-b mb-5 px-10 py-3">
-          <Container>
-                <div className='flex items-center gap-5'>
-                    <Link href="/">
-                       <ShieldCheck className="w-10 h-10" color='green'/>
-                    </Link>
-                    <NavLinks />
-                </div>
-          </Container>
+      <Container>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-5">
+            <Link href="/">
+              <ShieldCheck className="w-10 h-10" color="green" />
+            </Link>
+            <NavLinks />
+          </div>
+          <Auth/>
+        </div>
+      </Container>
     </nav>
-  )
-}
+  );
+};
 
 const NavLinks = () => {
   const currentPath = usePathname();
 
   const links = [
-    { href: "/", label: "Peak Time Analysis" },
+    { href: "/PeakTimeAnalysis", label: "Peak Time Analysis" },
     { href: "/BehaviouralAnalysis", label:"Behavioural Analysis" },
-    { href: "/DeviceMonitoring", label: 'Device Monitoring'},
+    { href: "/NetworkPacketAnalysis", label: 'Network Packet Analysis' },
+    { href: "/PatientHealthAnalysis", label: 'Patient Health Analysis' },
     { href: "/RiskAssesment", label: "Risk Assesment" }
   ];
 

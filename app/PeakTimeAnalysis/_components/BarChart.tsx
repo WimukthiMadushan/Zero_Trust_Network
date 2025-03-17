@@ -15,28 +15,6 @@ import {
 } from "@/components/ui/chart";
 import { Flex, Box } from "@radix-ui/themes";
 
-const dummyData = [
-  { id: 1, name: "User 1", status: "Healthy" },
-  { id: 2, name: "User 2", status: "Danger" },
-  { id: 3, name: "User 3", status: "Healthy" },
-  { id: 4, name: "User 4", status: "Danger" },
-  { id: 5, name: "User 5", status: "Healthy" },
-  { id: 6, name: "User 6", status: "Danger" },
-  { id: 7, name: "User 7", status: "Healthy" },
-  { id: 8, name: "User 8", status: "Danger" },
-  { id: 9, name: "User 9", status: "Healthy" },
-  { id: 10, name: "User 10", status: "Danger" },
-  { id: 11, name: "User 11", status: "Healthy" },
-  { id: 12, name: "User 12", status: "Danger" },
-  { id: 13, name: "User 13", status: "Healthy" },
-  { id: 14, name: "User 14", status: "Danger" },
-  { id: 15, name: "User 15", status: "Healthy" },
-  { id: 16, name: "User 16", status: "Danger" },
-  { id: 17, name: "User 17", status: "Healthy" },
-  { id: 18, name: "User 18", status: "Danger" },
-  { id: 19, name: "User 19", status: "Healthy" },
-];
-
 
 const chartConfig = {
   healthy: {

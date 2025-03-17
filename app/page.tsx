@@ -1,38 +1,39 @@
-'use client';
-
-import RealTimeAccessTable from "./RealTimeAccessTable";
-import BarChart from "./BarChart";
-import { Flex } from "@radix-ui/themes";
-import { useState, useEffect } from "react";
-import { database } from "./../lib/firebase"; 
-import { ref, onValue } from "firebase/database";
+import { Box, Button, Container, Flex, Text } from "@radix-ui/themes";
+import Image from "next/image";
+import Header_image from "./_Images/Header.jpg";
+import Link from "next/link";
 
 export default function Home() {
-  const [userData, setUserData] = useState<{ name: string; status: boolean }[]>([]);
-  useEffect(() => {
-    const dbRef = ref(database, "Component_1");
-
-    const unsubscribe = onValue(dbRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        const formattedData = Object.keys(data).map((username) => ({
-          name: username,
-          status: Boolean(data[username]),
-        }));
-        setUserData(formattedData);
-        console.log(formattedData);
-      } else {
-        setUserData([]);
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-  
   return (
-    <Flex className="space-x-2 p-2 flex-col sm:flex-row sm:justify-center md:gap-2">
-      <RealTimeAccessTable userData={ userData } />
-      <BarChart userData={ userData }/>
-    </Flex>
+    <Container className="vh-100 flex items-center justify-center bg-gray-50">
+      <Flex
+        direction="row"
+        justify="start"
+        align="center"
+        className="space-x-6 w-full"
+      >
+        <Box className="text-left flex-1">
+          <Text as="p" className="text-[3rem] font-bold mb-4 text-[#3D63DD] leading-tight">
+            Start Your Journey To <br /> Zero Trust Security.
+          </Text>
+          <Flex direction="column">
+            <Text className="text-md text-gray-600 mb-6">
+              Provide seamless access control for all your <br />applications with our zero trust secure access
+            </Text>
+            <Link href="/PeakTimeAnalysis">
+              <Button radius="large" variant="soft" className="w-1/2">Get Started</Button>
+            </Link>
+          </Flex> 
+        </Box>
+        <Box className="flex justify-center flex-1">
+          <Image
+            src={Header_image}
+            alt="header"
+            width={500}
+            height={250}
+          />
+        </Box>
+      </Flex>
+    </Container>
   );
 }

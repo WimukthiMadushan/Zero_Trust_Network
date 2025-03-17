@@ -65,8 +65,8 @@ const DeviceMonitoringTable = ({ packetAnalysisData = [], currentStatus }: any) 
     };
 
     return (
-        <div className="mb-5 w-[55%] border border-gray-300 shadow-lg rounded-xl p-5 bg-white">
-            <Flex align="center" justify="between" className="mb-5">
+        <div className="w-full sm:w-[90%] md:w-[70%] lg:w-[55%] border border-gray-300 shadow-lg rounded-xl p-5 bg-white mx-auto">
+            <Flex align="center" justify="between" className="mb-5 flex-col sm:flex-row">
                 <p className="text-2xl font-bold">Network Packets Analysis Table</p>
                 <StatusSelector
                     placeholder="Filter By Status.."
