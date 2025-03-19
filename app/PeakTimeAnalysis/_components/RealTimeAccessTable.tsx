@@ -13,12 +13,16 @@ const StatusDetails: Record<string, { label: string; color: "red" | "green" }> =
 
 const tableHeaders = [
   { label: "Username", key: "name" },
+  { label: "Login Date and Time", key: "loginDateTime" },
+  { label: "Logout Date and Time", key: "logoutDateTime" },
   { label: "Status", key: "status" },
 ];
 
 interface userDataProps {
   name: string;
   status: boolean;
+  loginTime: string;
+  logoutTime: string;
 }
 const RealTimeAccessTable = ({ userData }: { userData: userDataProps[] }) => {
   
@@ -61,16 +65,26 @@ const RealTimeAccessTable = ({ userData }: { userData: userDataProps[] }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {currentData.map((data) => (
-            <TableRow key={data.name} className="even:bg-gray-50">
-              <TableCell className="py-2 px-4 border-t border-gray-200">{data.name}</TableCell>
-              <TableCell className="py-2 px-4 border-t border-gray-200">
-                <Badge color={StatusDetails[String(data.status)].color}>
-                  {StatusDetails[String(data.status)].label}
-                </Badge>
+          {currentData.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={tableHeaders.length} className="py-4 text-center">
+                No data found
               </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            currentData.map((data) => (
+              <TableRow key={data.name} className="even:bg-gray-50">
+                <TableCell className="py-2 px-4 border-t border-gray-200">{data.name}</TableCell>
+                <TableCell className="py-2 px-4 border-t border-gray-200">
+                  <Badge color={StatusDetails[String(data.status)].color}>
+                    {StatusDetails[String(data.status)].label}
+                  </Badge>
+                </TableCell>
+                <TableCell className="py-2 px-4 border-t border-gray-200">{data.loginTime}</TableCell>
+                <TableCell className="py-2 px-4 border-t border-gray-200">{data.logoutTime}</TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
 
