@@ -5,14 +5,19 @@ import { onValue, ref } from 'firebase/database';
 import React, { useEffect, useState } from 'react'
 import DeviceMonitoringTable from './_components/DeviceMonitoringTable';
 import DeviceMonitoringSummaryTable from './_components/DeviceMonitoringSummaryGraph';
+import TableSkeleton from '@/components/TableSkelton';
+import ChartSkelton from '@/components/ChartSkelton';
 
 const NetworkPacketAnalysis = () => {
-    const [packetAnalysis, setPacketAnalysis] = useState<{ packet: string; status: boolean }[]>([]);
-    const [currentStatus, setCurrentStatus] = useState<boolean>(false);
-    useEffect(() => {
-        const dbRef = ref(database, "component_3");
+  const [packetAnalysis, setPacketAnalysis] = useState<{ packet: string; status: boolean }[]>([]);
+  const [currentStatus, setCurrentStatus] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    const dbRef = ref(database, "component_3");
     
-        const unsubscribe = onValue(dbRef, (snapshot) => {
+    setIsLoading(true);
+      
+    const unsubscribe = onValue(dbRef, (snapshot) => {
           if (snapshot.exists()) {
             const data = snapshot.val();
     
@@ -37,14 +42,14 @@ const NetworkPacketAnalysis = () => {
             setCurrentStatus(false);
           }
         });
-    
+    setIsLoading(false);
         return () => unsubscribe();
       }, []);
 
   return (
     <Flex className="space-x-2 p-2 flex-col sm:flex-row sm:justify-center md:gap-2">
-      <DeviceMonitoringTable packetAnalysisData={packetAnalysis} currentStatus={currentStatus} />
-      <DeviceMonitoringSummaryTable packetAnalysisData={packetAnalysis}/>
+      {isLoading ? <TableSkeleton /> : <DeviceMonitoringTable packetAnalysisData={packetAnalysis} currentStatus={currentStatus} />}
+      {isLoading ? <ChartSkelton /> : <DeviceMonitoringSummaryTable packetAnalysisData={packetAnalysis}/>}   
   </Flex>
   )
 }

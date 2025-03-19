@@ -6,14 +6,20 @@ import { Flex } from "@radix-ui/themes";
 import { useState, useEffect } from "react";
 import { database } from "./../../lib/firebase"; 
 import { ref, onValue } from "firebase/database";
+import ChartSkelton from '../../components/ChartSkelton';
+import TableSkeleton from '../../components/TableSkelton';
 
 const PeakTimeAnalysis = () => {
-    const [userData, setUserData] = useState<
+  const [userData, setUserData] = useState<
   { name: string; status: boolean; loginTime: string; logoutTime: string }[]
->([]);
+    >([]);
+  const [isLoading, setIsLoading] = useState(false);
+  
 
 useEffect(() => {
   const dbRef = ref(database, "component_1");
+
+  setIsLoading(true)
 
   const unsubscribe = onValue(dbRef, (snapshot) => {
     if (snapshot.exists()) {
@@ -29,16 +35,16 @@ useEffect(() => {
     } else {
       setUserData([]);
     }
+     setIsLoading(false);
   });
 
   return () => unsubscribe();
 }, []);
-
-    
+  
     return (
       <Flex className="space-x-2 p-2 flex-col sm:flex-row sm:justify-center md:gap-2">
-        <RealTimeAccessTable userData={ userData } />
-        <BarChart userData={ userData }/>
+        { isLoading ? <TableSkeleton/> : <RealTimeAccessTable userData={ userData } />}
+        { isLoading ? <ChartSkelton/> : <BarChart userData={ userData }/>}
       </Flex>
     );
 }

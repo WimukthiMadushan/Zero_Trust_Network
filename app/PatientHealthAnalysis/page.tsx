@@ -5,14 +5,18 @@ import { onValue, ref } from 'firebase/database';
 import React, { useEffect, useState } from 'react'
 import PatientHealthAnalysisTable from './_components/PatientHealthAnalysisTable';
 import PatientHealthAnalysisGraph from './_components/PatientHealthAnalysisGraph';
+import TableSkeleton from '@/components/TableSkelton';
+import ChartSkelton from '@/components/ChartSkelton';
 
 const PatientHealthAnalysis = () => {
-    const [deviceData, setDeviceData] = useState<{ id: string; health: boolean }[]>([]);
+  const [deviceData, setDeviceData] = useState<{ id: string; health: boolean }[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        const dbRef = ref(database, "component_3");
+      const dbRef = ref(database, "component_3");
     
-        const unsubscribe = onValue(dbRef, (snapshot) => {
+      setIsLoading(true);
+      const unsubscribe = onValue(dbRef, (snapshot) => {
           if (snapshot.exists()) {
             const data = snapshot.val();
     
@@ -29,15 +33,17 @@ const PatientHealthAnalysis = () => {
           } else {
             setDeviceData([]);
           }
-        });
+      });
+      
+      setIsLoading(false);
     
         return () => unsubscribe();
       }, []);
 
   return (
     <Flex className="space-x-2 p-2 flex-col sm:flex-row sm:justify-center md:gap-2">
-      <PatientHealthAnalysisTable deviceData={deviceData} />
-      <PatientHealthAnalysisGraph deviceData={deviceData} />
+      {isLoading ? <TableSkeleton /> : <PatientHealthAnalysisTable deviceData={deviceData} />}
+      {isLoading ? <ChartSkelton/> : <PatientHealthAnalysisGraph deviceData={deviceData} />}
     </Flex>
   )
 }

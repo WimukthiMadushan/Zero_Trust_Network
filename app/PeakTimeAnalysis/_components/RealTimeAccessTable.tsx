@@ -13,9 +13,9 @@ const StatusDetails: Record<string, { label: string; color: "red" | "green" }> =
 
 const tableHeaders = [
   { label: "Username", key: "name" },
+  { label: "Status", key: "status" },
   { label: "Login Date and Time", key: "loginDateTime" },
   { label: "Logout Date and Time", key: "logoutDateTime" },
-  { label: "Status", key: "status" },
 ];
 
 interface userDataProps {

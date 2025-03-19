@@ -12,24 +12,34 @@ const RiskAssesmentPage = () => {
     probability_risk_level: 0,
     summary: "No risk detected.",
   });
+  const [isLoading, setIsLoading] = useState(false); 
 
   useEffect(() => {
     const dbRef = ref(database, "component_4");
-
+    setIsLoading(true);
     const unsubscribe = onValue(dbRef, (snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
         setSummary({
           malicious: data.malicious || false,
-          probability_risk_level: data.probalility_risk_level || 0, 
+          probability_risk_level: data.probability_risk_level || 0,
           summary: data.summary || "No risk data available.",
         });
         console.log("Fetched Risk Assessment Data:", data);
       }
+      setIsLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => unsubscribe(); 
   }, []);
+
+  if (isLoading) {
+    return (
+      <Box maxWidth="50rem" className="mx-auto mt-5">
+        <SkeletonLoader />
+      </Box>
+    );
+  }
 
   return (
     <Box maxWidth="50rem" className="mx-auto mt-5">
@@ -58,5 +68,14 @@ const RiskAssesmentPage = () => {
     </Box>
   );
 };
+
+// Skeleton loader component for loading state
+const SkeletonLoader = () => (
+  <Box className="space-y-4">
+    <Box className="h-6 bg-gray-300 rounded-md w-32" />
+    <Box className="h-8 bg-gray-300 rounded-md w-64" />
+    <Box className="h-8 bg-gray-300 rounded-md w-48" />
+  </Box>
+);
 
 export default RiskAssesmentPage;
