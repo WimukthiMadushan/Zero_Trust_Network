@@ -33,8 +33,13 @@ interface userDataProps {
 }
 
 export default function Component({ userData }: { userData: userDataProps[] }) {
-  const healthyCount = userData.filter(user => user.status === true).length;
-  const dangerCount = userData.filter(user => user.status === false).length;
+
+  const healthyCount = userData.filter(user => String(user.status) === 'true').length;
+  const dangerCount = userData.filter(user => String(user.status) === 'false').length;
+  
+
+  console.log(userData)
+  console.log(healthyCount, dangerCount)
 
   const chartData = [
   { status: "Healthy", quantity: healthyCount, fill: "var(--color-healthy)" },
