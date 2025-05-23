@@ -27,7 +27,7 @@ const DeviceMonitoringTable = ({ packetAnalysisData = [], currentStatus }: any) 
     const [currentPage, setCurrentPage] = useState(1);
     const [statusFilter, setStatusFilter] = useState('All');
 
-    const pageSize = 6;
+    const pageSize = 4;
 
     const onPageChange = (page: number) => {
         setCurrentPage(page);

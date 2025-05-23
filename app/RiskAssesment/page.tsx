@@ -7,10 +7,14 @@ import { ShieldCheck, Skull } from "lucide-react";
 import React, { useState, useEffect } from "react";
 
 const RiskAssesmentPage = () => {
-  const [summary, setSummary] = useState({
+  const [report, setReport] = useState<{
+    malicious: boolean;
+    entries: { query: string; answer: string | number }[];
+    summary?: string;
+  }>({
     malicious: false,
-    probability_risk_level: 0,
-    summary: "No risk detected.",
+    entries: [],
+    summary: "",
   });
   const [isLoading, setIsLoading] = useState(false); 
 
@@ -20,12 +24,48 @@ const RiskAssesmentPage = () => {
     const unsubscribe = onValue(dbRef, (snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
-        setSummary({
-          malicious: data.malicious || false,
-          probability_risk_level: data.probability_risk_level || 0,
-          summary: data.summary || "No risk data available.",
+        // 1) Define the exact top-level keys in order
+        const topLevelKeys = [
+          "How_would_the_actor_do_it__What_would_they_do_",
+          "How_would_the_information_asset_s_security_requirements_be_breached_",
+          "What_is_the_actor_s_reason_for_it_",
+          "What_would_be_the_resulting_effect_on_the_information_asset_",
+          "Who_would_exploit_the_area_of_concern_or_threat_"
+        ];
+
+        // 2) Build entries array
+        const entries: { query: string; answer: string | number }[] = [];
+
+        // Add top-level Q&A
+        topLevelKeys.forEach((key) => {
+          if (data[key]) {
+            entries.push({
+              query: data[key].query,
+              answer: data[key].answer
+            });
+          }
         });
-        console.log("Fetched Risk Assessment Data:", data);
+
+        // Add steps Q&A
+        const stepsObj = data.steps || {};
+        Object.values(stepsObj).forEach((step: any) => {
+          entries.push({
+            query: step.query,
+            answer: step.answer
+          });
+        });
+
+        entries.push({
+          query: "Summary File",
+          answer: data.summary
+        });
+
+        setReport({
+          malicious: data.malicious || false,
+          entries,
+          summary: data.summary || "",
+        });
+
       }
       setIsLoading(false);
     });
@@ -42,27 +82,53 @@ const RiskAssesmentPage = () => {
   }
 
   return (
-    <Box maxWidth="50rem" className="mx-auto mt-5">
-      <Card className="p-6 flex justify-center shadow-lg rounded-lg">
-        <Box>
-          <Text as="div" size="4" mb="4" className="font-bold text-center">
-            Summary of the Risk
-          </Text>
+    <Box maxWidth="60rem" className="mx-auto mt-8 py-8 px-6">
+      {/* Summary */}
+      <Card className="p-6 mb-8 shadow-lg rounded-lg">
+        <Text size="5" className="font-bold text-center mb-4">
+          Threat Analysis Report
+        </Text>
 
-          <Callout.Root color={summary.malicious ? "red" : "green"}>
-            <Flex gapX="2">
-              <Callout.Icon>
-                {summary.malicious ? <Skull color="red" /> : <ShieldCheck color="green" />}
-              </Callout.Icon>
-              <Callout.Text>{summary.summary}</Callout.Text>
-            </Flex>
-            <Flex align="center" justify="start" className="mt-4 text-sm ml-1" gapX="2">
-              <InfoCircledIcon />
-              <Text as="div">
-                Risk Probability: <strong>{summary.probability_risk_level}%</strong>
-              </Text>
-            </Flex>
-          </Callout.Root>
+        <Callout.Root color={report.malicious ? "red" : "green"}>
+          <Flex gapX="3" align="center">
+            <Callout.Icon>
+              {report.malicious ? <Skull color="red" /> : <ShieldCheck color="green" />}
+            </Callout.Icon>
+            {/* Optionally, could display a summary here if wanted */}
+          </Flex>
+          <Box className="mt-2 text-center">
+            <Text size="4">{report.summary}</Text>
+          </Box>
+        </Callout.Root>
+      </Card>
+
+      {/* Detailed Q&A Table */}
+      <Card className="p-6 shadow rounded-lg space-y-4">
+        <Text size="4" className="font-semibold mb-4">
+          Detailed Q&A
+        </Text>
+
+        <Box className="rounded-lg border border-gray-200 overflow-hidden">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr>
+                <th className="border-b py-3 px-4 text-left bg-gray-100 font-semibold">Question</th>
+                <th className="border-b py-3 px-4 text-left bg-gray-100 font-semibold">Answer</th>
+              </tr>
+            </thead>
+            <tbody>
+              {report.entries.map((row, idx) => (
+                <tr key={idx} className={`transition-colors hover:bg-gray-100 ${idx % 2 === 0 ? "bg-white" : "bg-gray-50"}`}>
+                  <td className="py-3 px-4 align-top">
+                    <Text className="font-medium">{row.query}</Text>
+                  </td>
+                  <td className="py-3 px-4 align-top">
+                    <Text>{row.answer}</Text>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </Box>
       </Card>
     </Box>

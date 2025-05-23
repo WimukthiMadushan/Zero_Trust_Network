@@ -37,7 +37,7 @@ const DeviceMonitoringSummaryGraph = ({ packetAnalysisData = [] }: any) => {
   { status: "Danger", quantity: dangerCount,fill: "var(--color-danger)" },
 ];
     return (
-        <Card className="w-[700px] h-[405px]">
+        <Card className="w-[700px] h-[420px]">
           <CardHeader>
             <Flex align="center" justify="between">
               <Box>
