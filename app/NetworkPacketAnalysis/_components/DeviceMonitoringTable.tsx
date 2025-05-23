@@ -23,7 +23,7 @@ const StatusDetails: Record<string, { label: string; color: "red" | "green" }> =
 };
 
 interface DeviceMonitoringTableProps {
-    packetAnalysisData?: any[];
+    packetAnalysisData?: PacketAnalysisItem[];
     currentStatus: boolean;
 }
 

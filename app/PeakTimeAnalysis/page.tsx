@@ -27,9 +27,9 @@ useEffect(() => {
       const formattedData = Object.entries(data).map(
         ([username, userInfo]: [string, any]) => ({
           name: username,
-          status: userInfo.status || false,
-          loginTime: userInfo.loginTime || "",
-          logoutTime: userInfo.logoutTime || "",
+          status: userInfo?.status ?? false,
+          loginTime: userInfo?.loginTime ?? "",
+          logoutTime: userInfo?.logoutTime ?? "",
         })
       );
       setUserData(formattedData);

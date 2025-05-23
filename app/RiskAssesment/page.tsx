@@ -47,10 +47,10 @@ const RiskAssesmentPage = () => {
 
         // Add steps Q&A
         const stepsObj = data.steps || {};
-        Object.values(stepsObj).forEach((step: any) => {
+        Object.values(stepsObj).forEach((step) => {
           entries.push({
-            query: step.query,
-            answer: step.answer
+            query: (step as { query: string; answer: string | number }).query,
+            answer: (step as { query: string; answer: string | number }).answer
           });
         });
 

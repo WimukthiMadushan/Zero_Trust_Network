@@ -9,7 +9,7 @@ import TableSkeleton from '@/components/TableSkelton';
 import ChartSkelton from '@/components/ChartSkelton';
 
 const NetworkPacketAnalysis = () => {
-  const [packetAnalysis, setPacketAnalysis] = useState<{ packet: string; status: boolean }[]>([]);
+  const [packetAnalysis, setPacketAnalysis] = useState<{ packet: number; status: boolean }[]>([]);
   const [currentStatus, setCurrentStatus] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
@@ -26,7 +26,7 @@ const NetworkPacketAnalysis = () => {
               ? Object.keys(data.packet_analysis)
                   .filter((key) => key !== "current")
                   .map((packet) => ({
-                    packet,
+                    packet: Number(packet),
                     status: Boolean(data.packet_analysis[packet]),
                   }))
               : [];

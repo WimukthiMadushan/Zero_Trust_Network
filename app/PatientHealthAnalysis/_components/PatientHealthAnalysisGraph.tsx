@@ -3,7 +3,6 @@
 import {
     Card,
     CardContent,
-    CardDescription,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -24,8 +23,12 @@ const chartConfig = {
   } satisfies ChartConfig;
 
 
-const PatientHealthAnalysisGraph = ({ deviceData = [] }: any) => {
-    console.log("Patient Health Data:", deviceData);
+interface PatientHealthAnalysisGraphProps {
+    deviceData?: { health: boolean }[];
+}
+
+const PatientHealthAnalysisGraph = ({ deviceData = [] }: PatientHealthAnalysisGraphProps) => {
+    //console.log("Patient Health Data:", deviceData);
 
     const healthyCount = deviceData.filter((device: { health: boolean; }) => device.health === true).length;
     const dangerCount = deviceData.filter((device: { health: boolean; }) => device.health === false).length;
