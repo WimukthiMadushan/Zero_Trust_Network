@@ -4,6 +4,7 @@ import { auth } from './../lib/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'js-cookie';
 
 const Auth = ({ open, onClose }: { open: boolean, onClose: () => void }) => {
   const [state, setState] = useState('Sign In');
@@ -18,33 +19,33 @@ const Auth = ({ open, onClose }: { open: boolean, onClose: () => void }) => {
   };
 
   const handleSignIn = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const token = await userCredential.user.getIdToken();
+      Cookies.set('firebaseToken', token); 
       toast.success('User Successfully Signed in', { position: 'bottom-right' });
-      //console.log('User signed in');
       onClose();
     } catch (err) {
       console.error(err);
       toast.error('Error Signing in', { position: 'bottom-right' });
-    }
-    finally {
+    } finally {
       setIsLoading(false);
     }
   };
 
   const handleCreateAccount = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const token = await userCredential.user.getIdToken();
+      Cookies.set('firebaseToken', token); 
       toast.success('Successfully Signed Up to the System', { position: 'bottom-right' });
-      //console.log('Account created');
       toggleState();
     } catch (err) {
       console.error(err);
       toast.error('Error Signing Up', { position: 'bottom-right' });
-    }
-    finally {
+    } finally {
       setIsLoading(false);
     }
   };

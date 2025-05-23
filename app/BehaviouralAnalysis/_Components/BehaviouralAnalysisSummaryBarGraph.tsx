@@ -12,7 +12,7 @@ import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 type DataProps = {
-    data: { name: string; ip_address: boolean; location: boolean; request: boolean }[];
+    data: { name: string; ip_address: boolean; request: boolean }[];
 };
 
 const countStatuses = (data: DataProps["data"], key: keyof DataProps["data"][0]) => {
@@ -32,7 +32,6 @@ const countStatuses = (data: DataProps["data"], key: keyof DataProps["data"][0])
 const BehaviouralAnalysisSummaryBarGraph: React.FC<DataProps> = ({ data }) => {
     const chartData = [
         { status: "IP Status", healthy: countStatuses(data, "ip_address").healthy, danger: countStatuses(data, "ip_address").danger },
-        { status: "Location Status", healthy: countStatuses(data, "location").healthy, danger: countStatuses(data, "location").danger },
         { status: "Request Status", healthy: countStatuses(data, "request").healthy, danger: countStatuses(data, "request").danger },
     ];
 
@@ -51,7 +50,7 @@ const BehaviouralAnalysisSummaryBarGraph: React.FC<DataProps> = ({ data }) => {
         <Card className="w-[40%]">
             <CardHeader>
                 <CardTitle>Bar Chart - Status Summary</CardTitle>
-                <CardDescription>Total count for IP, Location, and Request Status</CardDescription>
+                <CardDescription>Total count for IP, and Request Status</CardDescription>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig}>

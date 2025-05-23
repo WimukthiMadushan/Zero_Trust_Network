@@ -1,7 +1,7 @@
 'use client';
 
 import StatusSelector from '@/components/StatusSelector';
-import { Badge, Box, Flex } from '@radix-ui/themes';
+import { Badge, Box, Flex, TextField } from '@radix-ui/themes';
 import {
     Table,
     TableBody,
@@ -10,12 +10,11 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import React, { useState } from 'react';
-import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
+import { DoubleArrowLeftIcon, DoubleArrowRightIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 
 const tableHeaders = [
     { label: "User Name", key: "name" },
     { label: "IP status", key: "ip" },
-    { label: "Location status", key: "location" },
     { label: "Request Amount", key: "request" },
 ];
 
@@ -25,14 +24,14 @@ const StatusDetails: Record<string, { label: string; color: "red" | "green" }> =
 };
 
 type DataProps = {
-    data: { name: string; ip_address: boolean; location: boolean; request: boolean }[];
+    data: { name: string; ip_address: boolean; request: boolean }[];
 };
 
 const BehaviouralAnalysisTable: React.FC<DataProps> = ({ data }) => {
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState({
         ip: 'All',
-        location: 'All',
         request: 'All',
     });
 
@@ -42,18 +41,19 @@ const BehaviouralAnalysisTable: React.FC<DataProps> = ({ data }) => {
     const transformedData = data.map(user => ({
         name: user.name,
         ip: user.ip_address ? "Healthy" : "Danger",
-        location: user.location ? "Healthy" : "Danger",
         request: user.request ? "Healthy" : "Danger",
     }));
 
-    // Filtering logic
     const filteredData = transformedData.filter(user => {
-        return (
+        const matchesStatus =
             (statusFilter.ip === 'All' || user.ip === statusFilter.ip) &&
-            (statusFilter.location === 'All' || user.location === statusFilter.location) &&
-            (statusFilter.request === 'All' || user.request === statusFilter.request)
-        );
+            (statusFilter.request === 'All' || user.request === statusFilter.request);
+    
+        const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase());
+    
+        return matchesStatus && matchesSearch;
     });
+    
 
     const itemCount = filteredData.length;
     const startIndex = (currentPage - 1) * pageSize;
@@ -75,6 +75,17 @@ const BehaviouralAnalysisTable: React.FC<DataProps> = ({ data }) => {
             <Flex align="center" justify="between" className="mb-4 flex-col sm:flex-row gap-3 sm:gap-4">
                 <p className="text-xl font-bold">Behavioural Analysis Table</p>
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+                    <input
+                        type="text"
+                            placeholder="Search the users…"
+                            className="bg-transparent outline-none w-full border border-gray-300 rounded px-3 text-sm"
+                            value={searchQuery}
+                            onChange={(e) => {
+                            setSearchQuery(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                    />
+
                     <StatusSelector
                         placeholder="Filter By IP Status.."
                         label="IP Status"
@@ -84,16 +95,6 @@ const BehaviouralAnalysisTable: React.FC<DataProps> = ({ data }) => {
                             { value: 'Danger', name: 'Danger' },
                         ]}
                         onChange={(value) => setStatusFilter(prev => ({ ...prev, ip: value }))}
-                    />
-                    <StatusSelector
-                        placeholder="Filter By Location Status.."
-                        label="Location Status"
-                        items={[
-                            { value: 'All', name: 'All' },
-                            { value: 'Healthy', name: 'Healthy' },
-                            { value: 'Danger', name: 'Danger' },
-                        ]}
-                        onChange={(value) => setStatusFilter(prev => ({ ...prev, location: value }))}
                     />
                     <StatusSelector
                         placeholder="Filter By Request Amount.."
@@ -123,11 +124,6 @@ const BehaviouralAnalysisTable: React.FC<DataProps> = ({ data }) => {
                                 <TableCell className="py-2 px-4 border-t border-gray-200">
                                     <Badge color={StatusDetails[user.ip].color}>
                                         {user.ip}
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="py-2 px-4 border-t border-gray-200">
-                                    <Badge color={StatusDetails[user.location].color}>
-                                        {user.location}
                                     </Badge>
                                 </TableCell>
                                 <TableCell className="py-2 px-4 border-t border-gray-200">

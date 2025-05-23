@@ -11,6 +11,7 @@ import { auth } from '@/lib/firebase';
 import LogoutPopup from '@/components/LogoutPopup';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 const NavBar = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -32,8 +33,9 @@ const NavBar = () => {
   
   const handleLogOut = async () => {
     await auth.signOut();
+    Cookies.remove('firebaseToken'); 
     setUser(null);
-    router.push('/')
+    router.push('/');
     toast.success('User Successfully Signed out', { position: 'bottom-right' });
   };
 

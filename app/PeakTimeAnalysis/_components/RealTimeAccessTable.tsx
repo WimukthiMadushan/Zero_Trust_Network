@@ -27,14 +27,23 @@ interface userDataProps {
 const RealTimeAccessTable = ({ userData }: { userData: userDataProps[] }) => {
   
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('All');
   const pageSize = 6;
 
   // Apply filter based on status
-  const filteredData =
-    statusFilter === 'All'
-      ? userData
-      : userData.filter((data) => StatusDetails[String(data.status)].label === statusFilter);
+  // Combine filtering by status and search query
+const filteredData = userData.filter((data) => {
+  const matchesStatus =
+    statusFilter === 'All' ||
+    StatusDetails[String(data.status)].label.toLowerCase() === statusFilter.toLowerCase();
+
+  const matchesSearch =
+    data.name.toLowerCase().includes(searchQuery.toLowerCase());
+
+  return matchesStatus && matchesSearch;
+});
+
 
   const totalPages = Math.ceil(filteredData.length / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
@@ -44,6 +53,16 @@ const RealTimeAccessTable = ({ userData }: { userData: userDataProps[] }) => {
     <div className="w-full sm:w-[90%] md:w-[70%] lg:w-[55%] border border-gray-300 shadow-lg rounded-xl p-5 bg-white mx-auto">
       <Flex align="center" justify="between" className="mb-5 flex-col sm:flex-row">
         <p className="text-2xl font-bold">Real-Time Health Status</p>
+        <input
+            type="text"
+            placeholder="Search the users…"
+            className="bg-transparent outline-none w-[20rem] border border-gray-300 rounded px-3 text-sm py-1"
+            value={searchQuery}
+            onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setCurrentPage(1);
+            }}
+        />
         <StatusSelector
           placeholder="Filter By Status..."
           label="Status"

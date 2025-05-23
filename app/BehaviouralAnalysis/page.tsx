@@ -11,7 +11,7 @@ import ChartSkelton from '@/components/ChartSkelton';
 
 const BehaviouralAnalysisPage = () => {
   const [userData, setUserData] = useState<
-    { name: string; ip_address: boolean; location: boolean; request: boolean }[]
+    { name: string; ip_address: boolean; request: boolean }[]
     >([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -26,8 +26,7 @@ const BehaviouralAnalysisPage = () => {
         const data = snapshot.val();
         const formattedData = Object.keys(data).map((username) => ({
           name: username,
-          ip_address: Boolean(data[username].ip_adress), 
-          location: Boolean(data[username].location),   
+          ip_address: Boolean(data[username].ip_adress),    
           request: Boolean(data[username].request), 
         }));
         setUserData(formattedData);
