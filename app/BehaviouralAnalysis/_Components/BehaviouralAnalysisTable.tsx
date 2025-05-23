@@ -43,6 +43,8 @@ const BehaviouralAnalysisTable: React.FC<DataProps> = ({ data }) => {
         ip: user.ip_address ? "Healthy" : "Danger",
         request: user.request ? "Healthy" : "Danger",
     }));
+    const sanitizeInput = (input: string): string =>
+        input.replace(/[<>]/g, "").trim();
 
     const filteredData = transformedData.filter(user => {
         const matchesStatus =
@@ -81,9 +83,11 @@ const BehaviouralAnalysisTable: React.FC<DataProps> = ({ data }) => {
                             className="bg-transparent outline-none w-full border border-gray-300 rounded px-3 text-sm"
                             value={searchQuery}
                             onChange={(e) => {
-                            setSearchQuery(e.target.value);
+                            const sanitized = sanitizeInput(e.target.value);
+                            setSearchQuery(sanitized);
                             setCurrentPage(1);
                         }}
+                        
                     />
 
                     <StatusSelector

@@ -31,6 +31,9 @@ const RealTimeAccessTable = ({ userData }: { userData: userDataProps[] }) => {
   const [statusFilter, setStatusFilter] = useState<string>('All');
   const pageSize = 6;
 
+  const sanitizeInput = (input: string): string =>
+    input.replace(/[<>]/g, "").trim();
+
   // Apply filter based on status
   // Combine filtering by status and search query
 const filteredData = userData.filter((data) => {
@@ -58,10 +61,11 @@ const filteredData = userData.filter((data) => {
             placeholder="Search the users…"
             className="bg-transparent outline-none w-[20rem] border border-gray-300 rounded px-3 text-sm py-1"
             value={searchQuery}
-            onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setCurrentPage(1);
-            }}
+                        onChange={(e) => {
+                            const sanitized = sanitizeInput(e.target.value);
+                            setSearchQuery(sanitized);
+                            setCurrentPage(1);
+                        }}
         />
         <StatusSelector
           placeholder="Filter By Status..."
