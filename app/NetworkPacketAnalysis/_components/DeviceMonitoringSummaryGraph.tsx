@@ -27,7 +27,11 @@ const chartConfig = {
   } satisfies ChartConfig;
   
 
-const DeviceMonitoringSummaryGraph = ({ packetAnalysisData = [] }: any) => {
+interface DeviceMonitoringSummaryGraphProps {
+  packetAnalysisData?: { status: boolean }[];
+}
+
+const DeviceMonitoringSummaryGraph = ({ packetAnalysisData = [] }: DeviceMonitoringSummaryGraphProps) => {
   //console.log("Packet Analysis Data:", packetAnalysisData);
   const healthyCount = packetAnalysisData.filter((user: { status: boolean; }) => user.status === true).length;
   const dangerCount = packetAnalysisData.filter((user: { status: boolean; }) => user.status === false).length;

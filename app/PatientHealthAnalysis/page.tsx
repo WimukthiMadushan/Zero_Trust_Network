@@ -9,7 +9,7 @@ import TableSkeleton from '@/components/TableSkelton';
 import ChartSkelton from '@/components/ChartSkelton';
 
 const PatientHealthAnalysis = () => {
-  const [deviceData, setDeviceData] = useState<{ id: string; health: boolean }[]>([]);
+  const [deviceData, setDeviceData] = useState<{ id: number; health: boolean }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -23,7 +23,7 @@ const PatientHealthAnalysis = () => {
             // Extract Patient Health Data
             const patientHealthData = data.Patient_health
               ? Object.keys(data.Patient_health).map((id) => ({
-                  id,
+                  id: Number(id),
                   health: Boolean(data.Patient_health[id]),
                 }))
               : [];

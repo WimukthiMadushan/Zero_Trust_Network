@@ -1,6 +1,5 @@
 "use client";
 import { database } from "@/lib/firebase";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Box, Callout, Card, Flex, Text } from "@radix-ui/themes";
 import { onValue, ref } from "firebase/database";
 import { ShieldCheck, Skull } from "lucide-react";

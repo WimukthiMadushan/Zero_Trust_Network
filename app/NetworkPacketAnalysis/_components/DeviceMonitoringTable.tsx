@@ -1,6 +1,6 @@
 'use client';
 import StatusSelector from '@/components/StatusSelector';
-import { Badge, Box, Callout, Flex } from '@radix-ui/themes';
+import { Badge, Callout, Flex } from '@radix-ui/themes';
 import {
     Table,
     TableBody,
@@ -22,7 +22,17 @@ const StatusDetails: Record<string, { label: string; color: "red" | "green" }> =
     false: { label: "Danger", color: "red" },
 };
 
-const DeviceMonitoringTable = ({ packetAnalysisData = [], currentStatus }: any) => {
+interface DeviceMonitoringTableProps {
+    packetAnalysisData?: any[];
+    currentStatus: boolean;
+}
+
+interface PacketAnalysisItem {
+    packet: number;
+    status: boolean;
+}
+
+const DeviceMonitoringTable = ({ packetAnalysisData = [], currentStatus }: DeviceMonitoringTableProps) => {
     //console.log("Packet Analysis Data:", packetAnalysisData);
     const [currentPage, setCurrentPage] = useState(1);
     const [statusFilter, setStatusFilter] = useState('All');
@@ -32,7 +42,7 @@ const DeviceMonitoringTable = ({ packetAnalysisData = [], currentStatus }: any) 
     const onPageChange = (page: number) => {
         setCurrentPage(page);
     };
-    const formattedData = packetAnalysisData.map((data: any) => ({
+    const formattedData = packetAnalysisData.map((data: PacketAnalysisItem) => ({
         packet: data.packet,
         status: data.status ? "Healthy" : "Danger",
     }));
@@ -44,7 +54,7 @@ const DeviceMonitoringTable = ({ packetAnalysisData = [], currentStatus }: any) 
     const filteredData =
         statusFilter === 'All'
             ? sortedData
-            : sortedData.filter((data: any) => data.status === statusFilter);
+            : sortedData.filter((data: { status: string }) => data.status === statusFilter);
 
     const itemCount = filteredData.length;
     const startIndex = (currentPage - 1) * pageSize;
@@ -102,7 +112,7 @@ const DeviceMonitoringTable = ({ packetAnalysisData = [], currentStatus }: any) 
                     </TableHeader>
                     <TableBody>
                         {currentData.length > 0 ? (
-                            currentData.map((data: any) => (
+                            currentData.map((data: { packet: number; status: string }) => (
                                 <TableRow key={data.packet} className="even:bg-gray-50">
                                     <TableCell className="py-2 px-4 border-t border-gray-200">{data.packet}</TableCell>
                                     <TableCell className="py-2 px-4 border-t border-gray-200">

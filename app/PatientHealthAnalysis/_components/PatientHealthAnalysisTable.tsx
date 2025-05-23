@@ -1,6 +1,6 @@
 'use client';
 import StatusSelector from '@/components/StatusSelector';
-import { Badge, Box, Flex } from '@radix-ui/themes';
+import { Badge, Flex } from '@radix-ui/themes';
 import {
     Table,
     TableBody,
@@ -17,7 +17,11 @@ const StatusDetails: Record<string, { label: string; color: "red" | "green" }> =
     false: { label: "Danger", color: "red" },
 };
 
-const PatientHealthAnalysis = ({ deviceData = [] }: any) => {
+interface PatientHealthAnalysisProps {
+    deviceData?: { id: number; health: boolean }[];
+}
+
+const PatientHealthAnalysis = ({ deviceData = [] }: PatientHealthAnalysisProps) => {
     console.log("Device Data:", deviceData);
     const [currentPage, setCurrentPage] = useState(1);
     const [statusFilter, setStatusFilter] = useState('All');
@@ -31,7 +35,7 @@ const PatientHealthAnalysis = ({ deviceData = [] }: any) => {
     const filteredData =
         statusFilter === 'All'
             ? sortedData
-            : sortedData.filter((device: any) => (device.health ? "Healthy" : "Danger") === statusFilter);
+            : sortedData.filter((device: { health: boolean }) => (device.health ? "Healthy" : "Danger") === statusFilter);
 
     // Pagination
     const itemCount = filteredData.length;
@@ -72,7 +76,7 @@ const PatientHealthAnalysis = ({ deviceData = [] }: any) => {
                 </TableHeader>
                 <TableBody>
                     {currentData.length > 0 ? (
-                        currentData.map((device: any) => (
+                        currentData.map((device: { id: number; health: boolean }) => (
                             <TableRow key={device.id} className="even:bg-gray-50">
                                 <TableCell className="py-2 px-4 border-t border-gray-200">{device.id}</TableCell>
                                 <TableCell className="py-2 px-4 border-t border-gray-200">

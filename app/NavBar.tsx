@@ -1,5 +1,5 @@
 'use client';
-import { Button, Container, Flex } from '@radix-ui/themes'
+import { Button, Container } from '@radix-ui/themes'
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import classNames from "classnames";
@@ -71,7 +71,7 @@ const NavLinks = ({ user, openAuthModal }: { user: User | null, openAuthModal: (
     { href: "/RiskAssesment", label: "Risk Assessment" }
   ];
 
-  const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, href: string) => {
+  const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, _href: string) => {
     if (!user) {
       e.preventDefault();
       openAuthModal();

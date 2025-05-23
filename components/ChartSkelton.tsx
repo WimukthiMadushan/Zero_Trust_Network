@@ -1,5 +1,4 @@
 import { CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ChartContainer } from '@/components/ui/chart'
 import { Box, Card, Flex, Skeleton } from '@radix-ui/themes'
 import React from 'react'
 

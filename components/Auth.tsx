@@ -24,7 +24,8 @@ const Auth = ({ open, onClose }: { open: boolean, onClose: () => void }) => {
       toast.success('User Successfully Signed in', { position: 'bottom-right' });
       //console.log('User signed in');
       onClose();
-    } catch (err: any) {
+    } catch (err) {
+      console.error(err);
       toast.error('Error Signing in', { position: 'bottom-right' });
     }
     finally {
@@ -39,7 +40,8 @@ const Auth = ({ open, onClose }: { open: boolean, onClose: () => void }) => {
       toast.success('Successfully Signed Up to the System', { position: 'bottom-right' });
       //console.log('Account created');
       toggleState();
-    } catch (err: any) {
+    } catch (err) {
+      console.error(err);
       toast.error('Error Signing Up', { position: 'bottom-right' });
     }
     finally {

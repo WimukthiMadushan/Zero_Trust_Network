@@ -24,12 +24,14 @@ useEffect(() => {
   const unsubscribe = onValue(dbRef, (snapshot) => {
     if (snapshot.exists()) {
       const data = snapshot.val();
-      const formattedData = Object.entries(data).map(([username, userInfo]: any) => ({
-        name: username,
-        status: userInfo.status || false,
-        loginTime: userInfo.loginTime || "",
-        logoutTime: userInfo.logoutTime || "",
-      }));
+      const formattedData = Object.entries(data).map(
+        ([username, userInfo]: [string, any]) => ({
+          name: username,
+          status: userInfo.status || false,
+          loginTime: userInfo.loginTime || "",
+          logoutTime: userInfo.logoutTime || "",
+        })
+      );
       setUserData(formattedData);
       console.log(formattedData);
     } else {
