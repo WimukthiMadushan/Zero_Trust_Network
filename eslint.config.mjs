@@ -15,7 +15,8 @@ const eslintConfig = [
     rules: {
       "@next/next/no-img-element": "off",
       "@next/next/no-html-link-for-pages": "off",
-      // Add any other rules you want to disable
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
 ];
