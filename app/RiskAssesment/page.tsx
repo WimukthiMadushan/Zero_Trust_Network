@@ -107,28 +107,23 @@ const RiskAssesmentPage = () => {
           Detailed Q&A
         </Text>
 
-        <Box className="rounded-lg border border-gray-200 overflow-hidden">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr>
-                <th className="border-b py-3 px-4 text-left bg-gray-100 font-semibold">Question</th>
-                <th className="border-b py-3 px-4 text-left bg-gray-100 font-semibold">Answer</th>
-              </tr>
-            </thead>
-            <tbody>
-              {report.entries.map((row, idx) => (
-                <tr key={idx} className={`transition-colors hover:bg-gray-100 ${idx % 2 === 0 ? "bg-white" : "bg-gray-50"}`}>
-                  <td className="py-3 px-4 align-top">
-                    <Text className="font-medium">{row.query}</Text>
-                  </td>
-                  <td className="py-3 px-4 align-top">
-                    <Text>{row.answer}</Text>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Box>
+        <Box className="space-y-4">
+            {report.entries.map((row, idx) => (
+            <Card
+              key={idx}
+              className="p-5 border border-gray-200 rounded-xl shadow-sm transition-transform hover:scale-[1.01] hover:shadow-md bg-white"
+              >
+            <Text size="4" className="font-semibold text-gray-800 mb-2">
+                {row.query}
+            </Text>
+            <br />
+            <Text size="3" className="text-gray-600 leading-relaxed">
+              {row.answer}
+            </Text>
+    </Card>
+  ))}
+</Box>
+
       </Card>
     </Box>
   );
