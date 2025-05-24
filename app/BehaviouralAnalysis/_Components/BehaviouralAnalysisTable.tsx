@@ -1,7 +1,7 @@
 'use client';
 
 import StatusSelector from '@/components/StatusSelector';
-import { Badge, Box, Flex, TextField } from '@radix-ui/themes';
+import { Badge, Box, Flex } from '@radix-ui/themes';
 import {
     Table,
     TableBody,
@@ -10,7 +10,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import React, { useState } from 'react';
-import { DoubleArrowLeftIcon, DoubleArrowRightIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
 
 const tableHeaders = [
     { label: "User Name", key: "name" },
@@ -28,6 +28,7 @@ type DataProps = {
 };
 
 const BehaviouralAnalysisTable: React.FC<DataProps> = ({ data }) => {
+    const [warningTriggered, setWarningTriggered] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState({
@@ -77,18 +78,19 @@ const BehaviouralAnalysisTable: React.FC<DataProps> = ({ data }) => {
             <Flex align="center" justify="between" className="mb-4 flex-col sm:flex-row gap-3 sm:gap-4">
                 <p className="text-xl font-bold">Behavioural Analysis Table</p>
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
-                    <input
-                        type="text"
-                            placeholder="Search the users…"
-                            className="bg-transparent outline-none w-full border border-gray-300 rounded px-3 text-sm"
-                            value={searchQuery}
-                            onChange={(e) => {
-                            const sanitized = sanitizeInput(e.target.value);
-                            setSearchQuery(sanitized);
-                            setCurrentPage(1);
-                        }}
-                        
-                    />
+                <input
+            type="text"
+            placeholder="Search the users…"
+            className="bg-transparent outline-none w-full border border-gray-300 rounded px-3 text-sm"
+            value={searchQuery}
+            onChange={(e) => {
+                const inputValue = e.target.value;
+                const sanitized = sanitizeInput(inputValue);
+                setSearchQuery(sanitized);
+                setWarningTriggered(/[<>]/.test(inputValue));
+                setCurrentPage(1);
+            }}
+        />
 
                     <StatusSelector
                         placeholder="Filter By IP Status.."
@@ -112,6 +114,11 @@ const BehaviouralAnalysisTable: React.FC<DataProps> = ({ data }) => {
                     />
                 </div>
             </Flex>
+            {warningTriggered && (
+                <div className="mt-2 w-full sm:w-auto ml-[18.5rem] mb-2">
+                        <Badge color="yellow">Warning: Special characters like &lt; or &gt; are not allowed.</Badge>
+                </div>
+            )}
             <Box>
                 <Table className="w-full border-separate border-spacing-0 shadow-md rounded-lg overflow-hidden">
                     <TableHeader className="bg-gray-100 border-b-2 border-gray-300">

@@ -25,7 +25,7 @@ interface userDataProps {
   logoutTime: string;
 }
 const RealTimeAccessTable = ({ userData }: { userData: userDataProps[] }) => {
-  
+  const [warningTriggered, setWarningTriggered] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('All');
@@ -61,11 +61,13 @@ const filteredData = userData.filter((data) => {
             placeholder="Search the users…"
             className="bg-transparent outline-none w-[20rem] border border-gray-300 rounded px-3 text-sm py-1"
             value={searchQuery}
-                        onChange={(e) => {
-                            const sanitized = sanitizeInput(e.target.value);
-                            setSearchQuery(sanitized);
-                            setCurrentPage(1);
-                        }}
+            onChange={(e) => {
+                const inputValue = e.target.value;
+                const sanitized = sanitizeInput(inputValue);
+                setSearchQuery(sanitized);
+                setWarningTriggered(/[<>]/.test(inputValue));
+                setCurrentPage(1);
+            }}
         />
         <StatusSelector
           placeholder="Filter By Status..."
@@ -78,6 +80,11 @@ const filteredData = userData.filter((data) => {
           onChange={setStatusFilter}
         />
       </Flex>
+      {warningTriggered && (
+                      <div className="w-full sm:w-auto ml-[19rem] mb-2">
+                              <Badge color="yellow">Warning: Special characters like &lt; or &gt; are not allowed.</Badge>
+                      </div>
+                  )}
       
       <Table className="w-full border-separate border-spacing-0 shadow-md rounded-lg overflow-hidden">
         <TableHeader className="bg-gray-100 border-b-2 border-gray-300">

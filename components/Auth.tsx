@@ -12,10 +12,29 @@ const Auth = ({ open, onClose }: { open: boolean, onClose: () => void }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-
+  const [warning, setWarning] = useState('');
 
   const toggleState = () => {
     setState(state === 'Sign In' ? 'Create Account' : 'Sign In');
+    setWarning(""); // Clear warning on toggle
+  };
+
+  const sanitizeInput = (input: string): string => {
+    const pattern = /[<>]/g;
+    if (pattern.test(input)) {
+      setWarning("You cannot enter symbols like < or >");
+    } else {
+      setWarning("");
+    }
+    return input.replace(pattern, "").trim();
+  };
+
+  const handleInputChange = (
+    setter: React.Dispatch<React.SetStateAction<string>>
+  ) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawInput = e.target.value;
+    const sanitized = sanitizeInput(rawInput);
+    setter(sanitized);
   };
 
   const handleSignIn = async () => {
@@ -23,7 +42,7 @@ const Auth = ({ open, onClose }: { open: boolean, onClose: () => void }) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const token = await userCredential.user.getIdToken();
-      Cookies.set('firebaseToken', token); 
+      Cookies.set('firebaseToken', token);
       toast.success('User Successfully Signed in', { position: 'bottom-right' });
       onClose();
     } catch (err) {
@@ -39,7 +58,7 @@ const Auth = ({ open, onClose }: { open: boolean, onClose: () => void }) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const token = await userCredential.user.getIdToken();
-      Cookies.set('firebaseToken', token); 
+      Cookies.set('firebaseToken', token);
       toast.success('Successfully Signed Up to the System', { position: 'bottom-right' });
       toggleState();
     } catch (err) {
@@ -62,7 +81,7 @@ const Auth = ({ open, onClose }: { open: boolean, onClose: () => void }) => {
               <TextField.Root
                 placeholder="Enter your Name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={handleInputChange(setName)}
               />
             </label>
           )}
@@ -72,7 +91,7 @@ const Auth = ({ open, onClose }: { open: boolean, onClose: () => void }) => {
             <TextField.Root
               placeholder="Enter your email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleInputChange(setEmail)}
             />
           </label>
 
@@ -82,15 +101,21 @@ const Auth = ({ open, onClose }: { open: boolean, onClose: () => void }) => {
               placeholder="Enter your Password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handleInputChange(setPassword)}
             />
           </label>
+
+          {warning && (
+            <Text as="p" size="1" color="red" mt="1">
+              {warning}
+            </Text>
+          )}
         </Flex>
 
         <Flex gap="3" mt="4" justify="end">
           <Button variant="soft" color="gray" onClick={onClose}>Cancel</Button>
-          {state === "Sign In" && <Button onClick={handleSignIn} disabled={isLoading}>Sign In { isLoading && <Spinner size='1'/>}</Button>}
-          {state === 'Create Account' && <Button onClick={handleCreateAccount} disabled = {isLoading}>Sign Up { isLoading && <Spinner size='1'/>}</Button>}
+          {state === "Sign In" && <Button onClick={handleSignIn} disabled={isLoading}>Sign In {isLoading && <Spinner size='1' />}</Button>}
+          {state === 'Create Account' && <Button onClick={handleCreateAccount} disabled={isLoading}>Sign Up {isLoading && <Spinner size='1' />}</Button>}
         </Flex>
 
         <Flex justify="center" mt="4">

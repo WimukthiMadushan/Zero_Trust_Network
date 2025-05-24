@@ -52,7 +52,7 @@ const NavBar = () => {
           {user ? (
             <LogoutPopup handleLogOut={handleLogOut} />
           ) : (
-            <Button variant='soft' onClick={handleSignIn}>Sign In</Button>
+            <Button variant='soft' onClick={handleSignIn} className='cursor-pointer'>Sign In</Button>
           )}
         </div>
       </Container>
