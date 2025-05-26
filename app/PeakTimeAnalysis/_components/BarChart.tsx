@@ -13,7 +13,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Flex, Box } from "@radix-ui/themes";
+import { Flex} from "@radix-ui/themes";
 
 
 const chartConfig = {
@@ -38,8 +38,8 @@ export default function Component({ userData }: { userData: userDataProps[] }) {
   const dangerCount = userData.filter(user => String(user.status) === 'false').length;
   
 
-  console.log(userData)
-  console.log(healthyCount, dangerCount)
+  //console.log(userData)
+  //console.log(healthyCount, dangerCount)
 
   const chartData = [
   { status: "Healthy", quantity: healthyCount, fill: "var(--color-healthy)" },
@@ -47,30 +47,30 @@ export default function Component({ userData }: { userData: userDataProps[] }) {
   ];
 
   return (
-    <Card className="w-full max-w-xl p-4 mx-auto">
-      <CardHeader>
-        <Flex align="center" justify="between">
-          <Box>
-            <CardTitle>Summary Of the Login Status</CardTitle>
-          </Box>
-        </Flex>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart height={300} data={chartData}>
-            <CartesianGrid vertical={false} strokeDasharray="3 3" />
-            <XAxis
-              dataKey="status"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
-            <YAxis />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Bar dataKey="quantity" strokeWidth={2} radius={8} />
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+    <Card className="w-full max-w-xl p-4 mx-auto bg-white h-[85%] flex flex-col">
+<CardHeader>
+  <Flex align="center" justify="center">
+    <CardTitle>Summary Of the Login Status</CardTitle>
+  </Flex>
+</CardHeader>
+  
+  <CardContent className="flex-grow flex items-end">
+    <ChartContainer config={chartConfig} className="w-full">
+      <BarChart width={500} height={350} data={chartData}>
+        <CartesianGrid vertical={false} strokeDasharray="3 3" />
+        <XAxis
+          dataKey="status"
+          tickLine={false}
+          tickMargin={5}
+          axisLine={false}
+        />
+        <YAxis />
+        <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+        <Bar dataKey="quantity" strokeWidth={2} radius={5} barSize={55} />
+      </BarChart>
+    </ChartContainer>
+  </CardContent>
+</Card>
+
   );
 }

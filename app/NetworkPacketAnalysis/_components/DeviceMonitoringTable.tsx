@@ -37,7 +37,7 @@ const DeviceMonitoringTable = ({ packetAnalysisData = [], currentStatus }: Devic
     const [currentPage, setCurrentPage] = useState(1);
     const [statusFilter, setStatusFilter] = useState('All');
 
-    const pageSize = 4;
+    const pageSize = 10;
 
     const onPageChange = (page: number) => {
         setCurrentPage(page);
@@ -75,7 +75,7 @@ const DeviceMonitoringTable = ({ packetAnalysisData = [], currentStatus }: Devic
     };
 
     return (
-        <div className="w-full sm:w-[90%] md:w-[70%] lg:w-[55%] border border-gray-300 shadow-lg rounded-xl p-5 bg-white mx-auto">
+        <div className="w-full h-[80%] sm:w-[90%] md:w-[70%] lg:w-[55%] border border-gray-300 shadow-lg rounded-xl p-5 bg-white mx-auto">
             <Flex align="center" justify="between" className="mb-5 flex-col sm:flex-row">
                 <p className="text-2xl font-bold">Network Packets Analysis Table</p>
                 <StatusSelector

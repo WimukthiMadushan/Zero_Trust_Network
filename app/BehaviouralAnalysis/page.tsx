@@ -40,7 +40,7 @@ const BehaviouralAnalysisPage = () => {
   }, []);
 
   return (
-    <Flex className="flex space-x-3 p-4">
+    <Flex className="flex space-x-3 p-4 bg-hero-gradient h-[100vh]">
       {isLoading ? <TableSkeleton/>: <BehaviouralAnalysisTable data={userData} />}
       {isLoading ? <ChartSkelton/>: <BehaviouralAnalysisSummaryBarGraph data={userData} />}
     </Flex>

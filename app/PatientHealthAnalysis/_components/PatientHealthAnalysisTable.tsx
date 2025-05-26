@@ -22,11 +22,11 @@ interface PatientHealthAnalysisProps {
 }
 
 const PatientHealthAnalysis = ({ deviceData = [] }: PatientHealthAnalysisProps) => {
-    console.log("Device Data:", deviceData);
+    //console.log("Device Data:", deviceData);
     const [currentPage, setCurrentPage] = useState(1);
     const [statusFilter, setStatusFilter] = useState('All');
 
-    const pageSize = 6;
+    const pageSize = 10;
 
     // Sort data (Descending order: -1, -2, -3)
     const sortedData = [...deviceData].sort((a, b) => b.id - a.id);
@@ -52,7 +52,7 @@ const PatientHealthAnalysis = ({ deviceData = [] }: PatientHealthAnalysisProps) 
     };
 
     return (
-        <div className="w-full sm:w-[90%] md:w-[70%] lg:w-[55%] border border-gray-300 shadow-lg rounded-xl p-5 bg-white mx-auto">
+        <div className="w-full h-[85%] sm:w-[90%] md:w-[70%] lg:w-[55%] border border-gray-300 shadow-lg rounded-xl p-5 bg-white mx-auto">
             <Flex align="center" justify="between" className="mb-5 flex-col sm:flex-row">
                 <p className="text-2xl font-bold">Patient Analysis Table</p>
                 <StatusSelector

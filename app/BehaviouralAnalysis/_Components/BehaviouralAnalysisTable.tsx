@@ -36,7 +36,7 @@ const BehaviouralAnalysisTable: React.FC<DataProps> = ({ data }) => {
         request: 'All',
     });
 
-    const pageSize = 6;
+    const pageSize = 12;
 
     // Convert boolean values to "Healthy" or "Danger"
     const transformedData = data.map(user => ({
@@ -74,7 +74,7 @@ const BehaviouralAnalysisTable: React.FC<DataProps> = ({ data }) => {
     };
 
     return (
-        <Box className="w-full sm:w-[65%] border border-gray-300 shadow-lg rounded-xl p-5 bg-white">
+        <Box className="w-full sm:w-[65%] border border-gray-300 shadow-lg rounded-xl p-5 bg-white h-[85%]">
             <Flex align="center" justify="between" className="mb-4 flex-col sm:flex-row gap-3 sm:gap-4">
                 <p className="text-xl font-bold">Behavioural Analysis Table</p>
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">

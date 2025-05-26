@@ -1,17 +1,17 @@
 import React from "react";
 import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
+import Logo from "./_Images/logo.png";
+import Image from "next/image";
 
 const Footer = () => {
   return (
-    <footer className="border-t mt-10 px-10 py-6 bg-gray-50 text-sm text-gray-600">
+    <footer className="border-t px-10 py-6 bg-gray-50 text-sm text-gray-600">
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Left: Logo and Copyright */}
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-6 h-6 text-green-600" />
+          <Image src={Logo} width={100} alt="logo" />
           <span>
-            &copy; {new Date().getFullYear()} Zero Trust Network. All rights
-            reserved.
+            &copy; {new Date().getFullYear()} Trust Lock. All rights reserved.
           </span>
         </div>
 

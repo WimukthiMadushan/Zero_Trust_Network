@@ -81,7 +81,8 @@ const RiskAssesmentPage = () => {
   }
 
   return (
-    <Box maxWidth="60rem" className="mx-auto mt-8 py-8 px-6">
+    <div className="bg-hero-gradient">
+    <Box maxWidth="60rem" className="mx-auto py-8 px-6">
       {/* Summary */}
       <Card className="p-6 mb-8 shadow-lg rounded-lg">
         <Text size="5" className="font-bold text-center mb-4">
@@ -111,21 +112,29 @@ const RiskAssesmentPage = () => {
             {report.entries.map((row, idx) => (
             <Card
               key={idx}
-              className="p-5 border border-gray-200 rounded-xl shadow-sm transition-transform hover:scale-[1.01] hover:shadow-md bg-white"
+              className="p-5 border border-gray-200 rounded-xl shadow-sm transition-transform hover:scale-[1.01] hover:shadow-md bg-white align-justify"
               >
-            <Text size="4" className="font-semibold text-gray-800 mb-2">
-                {row.query}
-            </Text>
-            <br />
-            <Text size="3" className="text-gray-600 leading-relaxed">
-              {row.answer}
-            </Text>
+            <Text
+  size="4"
+  className="font-semibold text-gray-800 mb-2 text-justify"
+>
+  {row.query}
+</Text>
+<br/>
+<Text
+  size="3"
+  className="text-gray-600 leading-relaxed text-justify"
+>
+  {row.answer}
+</Text>
+
     </Card>
   ))}
 </Box>
 
       </Card>
-    </Box>
+      </Box>
+      </div>
   );
 };
 

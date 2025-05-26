@@ -1,9 +1,8 @@
 'use client';
-import { Button, Container } from '@radix-ui/themes'
+import { Button } from '@radix-ui/themes'
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import classNames from "classnames";
-import { ShieldCheck } from 'lucide-react';
 import Auth from '@/components/Auth';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
@@ -12,6 +11,8 @@ import LogoutPopup from '@/components/LogoutPopup';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import Image from 'next/image';
+import logo from "./_Images/logo.png"
 
 const NavBar = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -40,22 +41,41 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="border-b mb-5 px-10 py-3">
-      <Container>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-5">
-            <Link href="/">
-              <ShieldCheck className="w-10 h-10" color="green" />
-            </Link>
-            <NavLinks user={user} openAuthModal={() => setAuthModel(true)} />
-          </div>
-          {user ? (
-            <LogoutPopup handleLogOut={handleLogOut} />
-          ) : (
-            <Button variant='soft' onClick={handleSignIn} className='cursor-pointer'>Sign In</Button>
-          )}
-        </div>
-      </Container>
+    <nav className="border-b px-6 lg:px-10 py-3 bg-white shadow-sm">
+  <div className="flex items-center justify-between max-w-7xl mx-auto w-full">
+    
+    {/* Left: Logo + Nav Links */}
+    <div className="flex items-center gap-6">
+          <div className="flex items-center">
+            <Link href="/" className="flex items-center gap-2">
+        <Image
+          src={logo}
+          alt="Logo"
+          width={108}
+          height={28}
+          className="object-contain"
+          priority
+              />
+              </Link>
+      </div>
+      <NavLinks user={user} openAuthModal={() => setAuthModel(true)} />
+    </div>
+
+    {/* Right: Auth Button or Logout */}
+    <div>
+      {user ? (
+        <LogoutPopup handleLogOut={handleLogOut} />
+      ) : (
+        <Button
+          variant="soft"
+          onClick={handleSignIn}
+          className="cursor-pointer"
+        >
+          Sign In
+        </Button>
+      )}
+    </div>
+  </div>
 
       {authModel && <Auth open={authModel} onClose={() => setAuthModel(false)} />}
     </nav>
