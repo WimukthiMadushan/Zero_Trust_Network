@@ -53,7 +53,7 @@ const filteredData = userData.filter((data) => {
   const currentData = filteredData.slice(startIndex, startIndex + pageSize);
 
   return (
-    <div className="w-full sm:w-[90%] md:w-[70%] lg:w-[55%] border border-gray-300 shadow-lg rounded-xl p-5 mx-auto bg-white h-[85%]">
+    <div className="w-full border border-gray-300 shadow-lg rounded-xl p-5 mx-auto bg-white h-[85%]">
       <Flex align="center" justify="between" className="mb-5 flex-col sm:flex-row">
         <p className="text-2xl font-bold">User Login/Logout Status</p>
         <input

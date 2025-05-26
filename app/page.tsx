@@ -66,7 +66,7 @@ export default function Home() {
         />
       </span>
     </h1>
-                <p className="text-xl text-gray-600 leading-relaxed max-w-xl">
+                <p className="text-xl text-gray-600 leading-relaxed max-w-xl font-[500]">
                   Deliver seamless, intelligent access control powered by behavioral analytics and peak-time intelligence.
                 </p>
               </div>

@@ -41,7 +41,7 @@ const PatientHealthAnalysis = () => {
       }, []);
 
   return (
-    <Flex className="space-x-2 p-2 flex-col sm:flex-row sm:justify-center md:gap-2 bg-hero-gradient h-[100vh]">
+    <Flex className="flex space-x-3 p-4 bg-hero-gradient h-[100vh]">
       {isLoading ? <TableSkeleton /> : <PatientHealthAnalysisTable deviceData={deviceData} />}
       {isLoading ? <ChartSkelton/> : <PatientHealthAnalysisGraph deviceData={deviceData} />}
     </Flex>
