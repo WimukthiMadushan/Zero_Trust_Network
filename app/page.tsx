@@ -46,19 +46,20 @@ export default function Home() {
   return (
     <div className="bg-hero-gradient">
       <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto px-1">
           <div className="grid lg:grid-cols-[2fr_2fr_1fr] gap-8 items-center h-[70vh]">
             {/* Left Column: Heading + Buttons */}
             <div className="space-y-8">
               <div className="space-y-4">
               <h1 className="text-5xl lg:text-6xl font-bold text-blue-900 leading-tight">
-      Embrace Zero Trust
+                  Embrace
+                  Zero Trust
       <br />
       <span className="text-blue-600">Security with</span>
       <br />
       <span className="text-blue-800">
         <TypeAnimation
-          sequence={['Confidence.', 1000, '', 500]}
+          sequence={['TrustLock.', 1000, '', 500]}
           speed={10}
           repeat={Infinity}
           cursor={true}
@@ -89,29 +90,38 @@ export default function Home() {
             </div>
 
             {/* Middle Column: VPN Image and animation */}
-            <div className="relative w-full h-full flex items-center justify-center">
-              <div className="relative z-10">
-                <div className="w-32 h-40 bg-gradient-to-b from-emerald-400 to-cyan-500 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                  <Shield className="w-16 h-16 text-white" />
-                  <div className="absolute inset-0 bg-white/20 rounded-3xl"></div>
-                </div>
-              </div>
+            <div className="relative w-full h-full flex items-center justify-center space-x-0">
+  <div className="relative z-10 ml-[4rem]">
+    <div className="w-32 h-40 bg-gradient-to-b from-emerald-400 to-cyan-500 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+      <Shield className="w-16 h-16 text-white" />
+      <div className="absolute inset-0 bg-white/20 rounded-3xl"></div>
+    </div>
+  </div>
 
-              <Image src={Header_image} alt="VPN" />
+  <Image
+  src={Header_image}
+  alt="VPN"
+  width={600}
+  height={400}
+  className="rounded-lg"
+/>
 
-              <div className="absolute top-8 right-4 bg-blue-600 text-white px-6 py-2 rounded-full font-bold shadow-lg animate-pulse">
-                VPN
-              </div>
 
-              <div className="absolute top-12 left-12 w-12 h-12 bg-white rounded-xl shadow-lg flex items-center justify-center animate-bounce">
-                <Settings className="w-6 h-6 text-blue-600" />
-              </div>
+  {/* The rest of your absolute positioned divs */}
+  <div className="absolute top-8 right-4 bg-blue-600 text-white px-6 py-2 rounded-full font-bold shadow-lg animate-pulse">
+    VPN
+  </div>
 
-              <div className="absolute bottom-32 right-16 w-3 h-3 bg-cyan-400 rounded-full animate-ping"></div>
-              <div className="absolute top-32 left-8 w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+  <div className="absolute top-12 left-12 w-12 h-12 bg-white rounded-xl shadow-lg flex items-center justify-center animate-bounce">
+    <Settings className="w-6 h-6 text-blue-600" />
+  </div>
 
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-200/30 to-cyan-200/30 rounded-full transform scale-150 opacity-50"></div>
-            </div>
+  <div className="absolute bottom-32 right-16 w-3 h-3 bg-cyan-400 rounded-full animate-ping"></div>
+  <div className="absolute top-32 left-8 w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+
+  <div className="absolute inset-0 bg-gradient-to-r from-blue-200/30 to-cyan-200/30 rounded-full transform scale-150 opacity-50"></div>
+</div>
+
             <div className="flex flex-col gap-4 items-start w-[15rem]">
   {features.map((feature) => (
     <Card

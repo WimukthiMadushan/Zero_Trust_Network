@@ -109,7 +109,7 @@ const NavLinks = ({ user, openAuthModal }: { user: User | null, openAuthModal: (
             href={link.href}
             className={classNames({
               "nav-link text-gray-600 hover:underline": true,
-              "!text-zinc-900": link.href === currentPath,
+              "!text-black underline decoration-1 decoration-black": link.href === currentPath,
             })}
             onClick={(e) => handleNavigation(e, link.href)}
           >
