@@ -118,7 +118,7 @@ export default function Home() {
         hover:backdrop-blur-md 
         hover:ring-1 hover:ring-white/50 
         group cursor-pointer rounded-xl 
-        w-[15rem] max-w-xs
+        w-[18rem] max-w-xs
         flex flex-row items-center px-4 py-3 
       `}
     >
