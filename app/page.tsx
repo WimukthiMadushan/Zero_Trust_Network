@@ -14,6 +14,7 @@ import RA from "./_Images/RA.png";
 import BA from "./_Images/BA.png";
 import PT from "./_Images/PT.png";
 import IDM from "./_Images/IDM.png";
+import { TypeAnimation } from 'react-type-animation';
 
 const features = [
   { title: "Peak Time Detection", icon: PT },
@@ -50,13 +51,20 @@ export default function Home() {
             {/* Left Column: Heading + Buttons */}
             <div className="space-y-8">
               <div className="space-y-4">
-                <h1 className="text-5xl lg:text-6xl font-bold text-blue-900 leading-tight">
-                  Embrace Zero Trust
-                  <br />
-                  <span className="text-blue-600">Security with</span>
-                  <br />
-                  <span className="text-blue-800">Confidence.</span>
-                </h1>
+              <h1 className="text-5xl lg:text-6xl font-bold text-blue-900 leading-tight">
+      Embrace Zero Trust
+      <br />
+      <span className="text-blue-600">Security with</span>
+      <br />
+      <span className="text-blue-800">
+        <TypeAnimation
+          sequence={['Confidence.', 1000, '', 500]}
+          speed={10}
+          repeat={Infinity}
+          cursor={true}
+        />
+      </span>
+    </h1>
                 <p className="text-xl text-gray-600 leading-relaxed max-w-xl">
                   Deliver seamless, intelligent access control powered by behavioral analytics and peak-time intelligence.
                 </p>
