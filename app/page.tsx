@@ -84,7 +84,7 @@ export default function Home() {
                   size="3"
                   className="border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300"
                 >
-                  Learn More
+                  Watch Demo
                 </Button>
               </div>
             </div>

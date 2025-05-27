@@ -1,12 +1,14 @@
 import { Button, Dialog, Flex, TextField, Text, Link, Spinner } from '@radix-ui/themes';
 import React, { useState } from 'react';
 import { auth } from './../lib/firebase';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, User } from 'firebase/auth';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
+const db = getFirestore();
 
-const Auth = ({ open, onClose }: { open: boolean, onClose: () => void }) => {
+const Auth = ({ open, onClose,onLoginSuccess }: { open: boolean, onClose: () => void, onLoginSuccess?: (user: User) => void }) => {
   const [state, setState] = useState('Sign In');
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
@@ -16,7 +18,7 @@ const Auth = ({ open, onClose }: { open: boolean, onClose: () => void }) => {
 
   const toggleState = () => {
     setState(state === 'Sign In' ? 'Create Account' : 'Sign In');
-    setWarning(""); // Clear warning on toggle
+    setWarning("");
   };
 
   const sanitizeInput = (input: string): string => {
@@ -41,17 +43,34 @@ const Auth = ({ open, onClose }: { open: boolean, onClose: () => void }) => {
     setIsLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const token = await userCredential.user.getIdToken();
-      Cookies.set('firebaseToken', token);
+      const user = userCredential.user;
+  
+      const idTokenResult = await user.getIdTokenResult();
+      Cookies.set('firebaseToken', idTokenResult.token);
+  
+      // Fetch user role from Firestore using UID
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+  
+      let role = "Guest";
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        role = userData.role ?? "normal user";
+      }
+  
+      console.log("User Role:", role);
+      localStorage.setItem("userRole", role);
+      onLoginSuccess?.(user);
       toast.success('User Successfully Signed in', { position: 'bottom-right' });
       onClose();
     } catch (err) {
-      console.error(err);
+      console.error("Sign-in Error:", err);
       toast.error('Error Signing in', { position: 'bottom-right' });
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   const handleCreateAccount = async () => {
     setIsLoading(true);
