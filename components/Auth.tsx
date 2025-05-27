@@ -64,8 +64,21 @@ const Auth = ({ open, onClose,onLoginSuccess }: { open: boolean, onClose: () => 
       toast.success('User Successfully Signed in', { position: 'bottom-right' });
       onClose();
     } catch (err) {
-      console.error("Sign-in Error:", err);
-      toast.error('Error Signing in', { position: 'bottom-right' });
+      let errorMessage = 'Error Signing in';
+
+      if (typeof err === 'object' && err !== null) {
+        const error = err as { code?: string; message?: string };
+        if (error.code === 'auth/password-does-not-meet-requirements') {
+          errorMessage = 'Password must contain at least 8 characters, a number, and a special character.';
+        } else if (error.code === 'auth/user-not-found') {
+          errorMessage = 'No user found with this email.';
+        } else if (error.code === 'auth/wrong-password') {
+          errorMessage = 'Incorrect password. Please try again.';
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+      }
+      toast.error(errorMessage, { position: 'bottom-right',pauseOnHover:true });
     } finally {
       setIsLoading(false);
     }
@@ -81,8 +94,24 @@ const Auth = ({ open, onClose,onLoginSuccess }: { open: boolean, onClose: () => 
       toast.success('Successfully Signed Up to the System', { position: 'bottom-right' });
       toggleState();
     } catch (err) {
-      console.error(err);
-      toast.error('Error Signing Up', { position: 'bottom-right' });
+      let errorMessage = 'Error Signing in';
+
+      if (typeof err === 'object' && err !== null) {
+        const error = err as { code?: string; message?: string };
+        if (error.code === 'auth/password-does-not-meet-requirements') {
+          errorMessage = 'Password must contain at least 8 characters, a number, and a special character.';
+        } else if (error.code === 'auth/user-not-found') {
+          errorMessage = 'No user found with this email.';
+        } else if (error.code === 'auth/wrong-password') {
+          errorMessage = 'Incorrect password. Please try again.';
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+      }
+      toast.error(errorMessage, {
+        position: 'bottom-right', pauseOnHover:true
+        
+       });
     } finally {
       setIsLoading(false);
     }
