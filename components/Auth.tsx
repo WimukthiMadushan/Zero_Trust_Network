@@ -58,7 +58,7 @@ const Auth = ({ open, onClose,onLoginSuccess }: { open: boolean, onClose: () => 
         role = userData.role ?? "normal user";
       }
   
-      console.log("User Role:", role);
+      //console.log("User Role:", role);
       localStorage.setItem("userRole", role);
       onLoginSuccess?.(user);
       toast.success('User Successfully Signed in', { position: 'bottom-right' });

@@ -17,8 +17,17 @@ const StatusDetails: Record<string, { label: string; color: "red" | "green" }> =
     false: { label: "Danger", color: "red" },
 };
 
+interface Vitals {
+    body_temperature?: number;
+    heart_rate?: number;
+    spo2?: number;
+    health_status?: boolean;
+    hr_prediction?: string;
+    svc_prediction?: string;
+}
+
 interface PatientHealthAnalysisProps {
-    deviceData?: { id: number; health: boolean }[];
+    deviceData?: { id: string; health: boolean; vitals?: Vitals | null }[];
 }
 
 const PatientHealthAnalysis = ({ deviceData = [] }: PatientHealthAnalysisProps) => {
@@ -29,7 +38,7 @@ const PatientHealthAnalysis = ({ deviceData = [] }: PatientHealthAnalysisProps) 
     const pageSize = 10;
 
     // Sort data (Descending order: -1, -2, -3)
-    const sortedData = [...deviceData].sort((a, b) => b.id - a.id);
+    const sortedData = deviceData;
 
     // Filter based on status
     const filteredData =
@@ -69,31 +78,64 @@ const PatientHealthAnalysis = ({ deviceData = [] }: PatientHealthAnalysisProps) 
 
             <Table className="w-full border-separate border-spacing-0 shadow-md rounded-lg overflow-hidden">
                 <TableHeader className="bg-gray-100 border-b-2 border-gray-300">
-                    <TableRow>
-                        <TableCell className="py-2 px-4 text-left font-medium">Device ID</TableCell>
-                        <TableCell className="py-2 px-4 text-left font-medium">Health Status</TableCell>
-                    </TableRow>
+                <TableRow>
+        <TableCell className="py-2 px-4 text-left font-medium">Patient ID</TableCell>
+        <TableCell className="py-2 px-4 text-left font-medium">Health Status</TableCell>
+        <TableCell className="py-2 px-4 text-left font-medium">Heart Rate</TableCell>
+        <TableCell className="py-2 px-4 text-left font-medium">Body Temp (°C)</TableCell>
+        <TableCell className="py-2 px-4 text-left font-medium">SpO₂ (%)</TableCell>
+        <TableCell className="py-2 px-4 text-left font-medium">HR Prediction</TableCell>
+        <TableCell className="py-2 px-4 text-left font-medium">SVC Prediction</TableCell>
+    </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {currentData.length > 0 ? (
-                        currentData.map((device: { id: number; health: boolean }) => (
-                            <TableRow key={device.id} className="even:bg-gray-50">
-                                <TableCell className="py-2 px-4 border-t border-gray-200">{device.id}</TableCell>
-                                <TableCell className="py-2 px-4 border-t border-gray-200">
-                                    <Badge color={StatusDetails[String(device.health)].color}>
-                                        {device.health ? "Healthy" : "Danger"}
-                                    </Badge>
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    ) : (
-                        <TableRow>
-                            <TableCell colSpan={2} className="py-2 px-4 text-center text-gray-500">
-                                No data available
-                            </TableCell>
-                        </TableRow>
-                    )}
-                </TableBody>
+    {currentData.length > 0 ? (
+        currentData.map((device) => (
+            <TableRow key={device.id} className="even:bg-gray-50">
+                <TableCell className="py-2 px-4 border-t border-gray-200">{device.id}</TableCell>
+                <TableCell className="py-2 px-4 border-t border-gray-200">
+                    <Badge color={StatusDetails[String(device.health)].color}>
+                        {device.health ? "Healthy" : "Danger"}
+                    </Badge>
+                </TableCell>
+                <TableCell className="py-2 px-4 border-t border-gray-200">
+                    {device.vitals?.heart_rate ?? "N/A"}
+                </TableCell>
+                <TableCell className="py-2 px-4 border-t border-gray-200">
+                    {device.vitals?.body_temperature ?? "N/A"}
+                </TableCell>
+                <TableCell className="py-2 px-4 border-t border-gray-200">
+                    {device.vitals?.spo2 ?? "N/A"}
+                </TableCell>
+                <TableCell className="py-2 px-4 border-t border-gray-200">
+    {device.vitals?.hr_prediction ? (
+        <Badge color={device.vitals.health_status === true ? "green" : "red"}>
+            {device.vitals.hr_prediction}
+        </Badge>
+    ) : (
+        "N/A"
+    )}
+</TableCell>
+<TableCell className="py-2 px-4 border-t border-gray-200">
+    {device.vitals?.svc_prediction ? (
+        <Badge color={device.vitals.svc_prediction === "Healthy" ? "green" : "red"}>
+            {device.vitals.svc_prediction}
+        </Badge>
+    ) : (
+        "N/A"
+    )}
+</TableCell>
+            </TableRow>
+        ))
+    ) : (
+        <TableRow>
+            <TableCell colSpan={7} className="py-2 px-4 text-center text-gray-500">
+                No data available
+            </TableCell>
+        </TableRow>
+    )}
+</TableBody>
+
             </Table>
 
             {/* Pagination Controls */}
